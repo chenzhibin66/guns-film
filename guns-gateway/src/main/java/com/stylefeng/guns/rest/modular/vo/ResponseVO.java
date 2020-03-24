@@ -28,6 +28,13 @@ public class ResponseVO<T> {
         return responseVO;
     }
 
+    public static <T> ResponseVO success(String message) {
+        ResponseVO responseVO = new ResponseVO();
+        responseVO.setStatus(0);
+        responseVO.setMsg(message);
+        return responseVO;
+    }
+
     /**
      * 业务异常
      **/
