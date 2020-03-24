@@ -1,11 +1,11 @@
-package com.stylefeng.guns.rest.common.persistence.model;
+package com.stylefeng.guns.rest.entity;
 
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
 
 /**
@@ -13,11 +13,11 @@ import java.io.Serializable;
  * 用户表
  * </p>
  *
- * @author jiangzh
- * @since 2018-08-02
+ * @author chenzhibin
+ * @since 2020-03-24
  */
-@TableName("mooc_user_t")
-public class MoocUserT extends Model<MoocUserT> {
+@TableName("user")
+public class UserDO extends Model<UserDO> {
 
     private static final long serialVersionUID = 1L;
 
@@ -69,15 +69,14 @@ public class MoocUserT extends Model<MoocUserT> {
     @TableField("head_url")
     private String headUrl;
     /**
-     * 生活状态
+     * 个人介绍
+     */
+    private String biography;
+    /**
+     * 生活状态 0-单身，1-热恋中，2-已婚，3-为人父母
      */
     @TableField("life_state")
     private Integer lifeState;
-    /**
-     * 生活状态
-     */
-    @TableField("biography")
-    private String biography;
     /**
      * 创建时间
      */
@@ -89,22 +88,6 @@ public class MoocUserT extends Model<MoocUserT> {
     @TableField("update_time")
     private Date updateTime;
 
-
-    public String getBiography() {
-        return biography;
-    }
-
-    public void setBiography(String biography) {
-        this.biography = biography;
-    }
-
-    public Integer getLifeState() {
-        return lifeState;
-    }
-
-    public void setLifeState(Integer lifeState) {
-        this.lifeState = lifeState;
-    }
 
     public Integer getUuid() {
         return uuid;
@@ -186,6 +169,22 @@ public class MoocUserT extends Model<MoocUserT> {
         this.headUrl = headUrl;
     }
 
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public Integer getLifeState() {
+        return lifeState;
+    }
+
+    public void setLifeState(Integer lifeState) {
+        this.lifeState = lifeState;
+    }
+
     public Date getBeginTime() {
         return beginTime;
     }
@@ -209,7 +208,7 @@ public class MoocUserT extends Model<MoocUserT> {
 
     @Override
     public String toString() {
-        return "MoocUserT{" +
+        return "UserDO{" +
         "uuid=" + uuid +
         ", userName=" + userName +
         ", userPwd=" + userPwd +
@@ -220,6 +219,8 @@ public class MoocUserT extends Model<MoocUserT> {
         ", userPhone=" + userPhone +
         ", address=" + address +
         ", headUrl=" + headUrl +
+        ", biography=" + biography +
+        ", lifeState=" + lifeState +
         ", beginTime=" + beginTime +
         ", updateTime=" + updateTime +
         "}";

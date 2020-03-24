@@ -5,40 +5,71 @@ import com.stylefeng.guns.api.user.UserAPI;
 import com.stylefeng.guns.api.user.vo.UserInfoModel;
 import com.stylefeng.guns.api.user.vo.UserModel;
 import com.stylefeng.guns.core.util.MD5Util;
-import com.stylefeng.guns.rest.common.persistence.dao.MoocUserTMapper;
-import com.stylefeng.guns.rest.common.persistence.model.MoocUserT;
+import com.stylefeng.guns.rest.convert.UserConvert;
+import com.stylefeng.guns.rest.entity.UserDO;
+import com.stylefeng.guns.rest.mapper.UserMapper;
 import org.apache.dubbo.config.annotation.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 
 @Component
-@Service(interfaceClass = UserAPI.class,loadbalance = "roundrobin" )
-public class UserServiceImpl implements UserAPI{
+@Service(interfaceClass = UserAPI.class, loadbalance = "roundrobin")
+public class UserServiceImpl implements UserAPI {
 
+    @Resource
+    private UserMapper userMapper;
 
     @Override
     public int login(String username, String password) {
+        UserDO userDO = new UserDO();
+        userDO.setUserName(username);
+        UserDO result = userMapper.selectOne(userDO);
+        if (result != null && result.getUuid() > 0) {
+            String md5Password = MD5Util.encrypt(password);
+            if (result.getUserPwd().equals(md5Password)) {
+                return result.getUuid();
+            }
+        }
         return 0;
     }
 
     @Override
     public boolean register(UserModel userModel) {
-        return false;
+        UserDO userDO = UserConvert.convert(userModel);
+        userDO.setUserPwd(MD5Util.encrypt(userModel.getPassword()));
+        Integer insert = userMapper.insert(userDO);
+        return (insert > 0) ? true : false;
     }
 
     @Override
     public boolean checkUsername(String username) {
-        return false;
+        EntityWrapper<UserDO> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_name", username);
+        Integer result = userMapper.selectCount(wrapper);
+        if (result != null && result > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
     public UserInfoModel getUserInfo(int uuid) {
-        return null;
+        UserDO userDO = userMapper.selectById(uuid);
+        return UserConvert.convert(userDO);
     }
 
     @Override
     public UserInfoModel updateUserInfo(UserInfoModel userInfoModel) {
-        return null;
+        UserDO userDO = UserConvert.convert(userInfoModel);
+        Integer isSuccess = userMapper.updateById(userDO);
+        if (isSuccess > 0) {
+            UserInfoModel newUserInfo = getUserInfo(userDO.getUuid());
+            return newUserInfo;
+        } else {
+            return userInfoModel;
+        }
     }
 }

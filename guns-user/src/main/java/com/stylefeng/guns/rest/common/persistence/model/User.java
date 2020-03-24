@@ -43,7 +43,7 @@ public class User extends Model<User> {
 
 	@Override
 	public String toString() {
-		return "User{" +
+		return "UserDO{" +
 			"id=" + id +
 			", userName=" + userName +
 			"}";
