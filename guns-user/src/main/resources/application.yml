@@ -30,10 +30,11 @@ spring:
   application:
     name: meeting-user
   datasource:
-      url: jdbc:mysql://127.0.0.1:3306/duddo?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+      url: jdbc:mysql://127.0.0.1:3306/dubbo?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
       username: root
       password: even0704
       filters: log4j,wall,mergeStat
+      driver-class-name: com.mysql.cj.jdbc.Driver
 logging:
   level.root: info
   level.com.stylefeng: debug
