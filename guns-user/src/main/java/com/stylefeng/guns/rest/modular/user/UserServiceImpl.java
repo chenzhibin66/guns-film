@@ -8,18 +8,15 @@ import com.stylefeng.guns.core.util.MD5Util;
 import com.stylefeng.guns.rest.convert.UserConvert;
 import com.stylefeng.guns.rest.entity.UserDO;
 import com.stylefeng.guns.rest.mapper.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.dubbo.config.annotation.Service;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
 
 @Component
-/*
 @Service(interfaceClass = UserAPI.class, loadbalance = "roundrobin")
-*/
-@Service
+
 public class UserServiceImpl implements UserAPI {
 
     @Resource

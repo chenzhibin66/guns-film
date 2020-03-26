@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.stylefeng.guns.rest.modular.vo.ResponseVO.success;
-
 /**
  * 请求验证的
  *

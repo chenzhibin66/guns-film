@@ -1,4 +1,4 @@
-package com.stylefeng.guns.rest.user;
+package com.stylefeng.guns.rest.modular.user;
 
 import com.stylefeng.guns.api.user.UserAPI;
 import com.stylefeng.guns.api.user.vo.UserInfoModel;
@@ -54,12 +54,12 @@ public class UserController {
         }
     }
 
-    @RequestMapping(name = "logout", method = RequestMethod.POST)
+    @RequestMapping(value = "logout", method = RequestMethod.POST)
     public ResponseVO logout() {
         return ResponseVO.success("用户退出成功");
     }
 
-    @RequestMapping(name = "getUserInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "getUserInfo", method = RequestMethod.GET)
     public ResponseVO getUserInfo() {
         String userId = CurrentUser.getCurrentUser();
         if (userId != null || userId.trim().length() > 0) {
@@ -75,7 +75,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(name = "updateUserInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "updateUserInfo", method = RequestMethod.POST)
     public ResponseVO updateUserInfo(UserInfoModel userInfoModel) {
         String userId = CurrentUser.getCurrentUser();
         if (userId != null || userId.trim().length() > 0) {
