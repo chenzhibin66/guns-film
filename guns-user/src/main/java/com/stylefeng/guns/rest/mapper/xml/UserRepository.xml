@@ -16,7 +16,7 @@
         <result column="head_url" property="headUrl" />
         <result column="biography" property="biography" />
         <result column="life_state" property="lifeState" />
-        <result column="begin_time" property="beginTime" />
+        <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 

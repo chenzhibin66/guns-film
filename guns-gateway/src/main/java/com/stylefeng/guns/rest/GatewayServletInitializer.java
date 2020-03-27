@@ -9,7 +9,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @author fengshuonan
  * @date 2017年9月29日09:00:42
  */
-public class GunsRestServletInitializer extends SpringBootServletInitializer {
+public class GatewayServletInitializer extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {

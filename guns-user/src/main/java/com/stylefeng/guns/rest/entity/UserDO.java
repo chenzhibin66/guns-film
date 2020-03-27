@@ -80,8 +80,8 @@ public class UserDO extends Model<UserDO> {
     /**
      * 创建时间
      */
-    @TableField("begin_time")
-    private Date beginTime;
+    @TableField("create_time")
+    private Date createTime;
     /**
      * 修改时间
      */
@@ -185,12 +185,13 @@ public class UserDO extends Model<UserDO> {
         this.lifeState = lifeState;
     }
 
-    public Date getBeginTime() {
-        return beginTime;
+    public Date getCreateTime() {
+
+        return createTime;
     }
 
-    public void setBeginTime(Date beginTime) {
-        this.beginTime = beginTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Date getUpdateTime() {
@@ -221,7 +222,7 @@ public class UserDO extends Model<UserDO> {
         ", headUrl=" + headUrl +
         ", biography=" + biography +
         ", lifeState=" + lifeState +
-        ", beginTime=" + beginTime +
+        ", createTime=" + createTime +
         ", updateTime=" + updateTime +
         "}";
     }

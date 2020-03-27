@@ -3,7 +3,8 @@ package com.stylefeng.guns.rest.convert;
 import com.stylefeng.guns.api.user.vo.UserInfoModel;
 import com.stylefeng.guns.api.user.vo.UserModel;
 import com.stylefeng.guns.rest.entity.UserDO;
-import com.stylefeng.guns.rest.utils.TimeUtil;
+
+import java.util.Date;
 
 /**
  * User模块相关转换
@@ -22,6 +23,7 @@ public class UserConvert {
         userDO.setEmail(userModel.getEmail());
         userDO.setUserPhone(userModel.getPhone());
         userDO.setAddress(userModel.getAddress());
+        userDO.setCreateTime(new Date());
         return userDO;
     }
 
@@ -41,8 +43,8 @@ public class UserConvert {
         userInfoModel.setBiography("" + userDO.getBiography());
         userInfoModel.setAddress(userDO.getAddress());
         userInfoModel.setHeadAddress(userDO.getHeadUrl());
-        userInfoModel.setBeginTime(userDO.getBeginTime().getTime());
-        userInfoModel.setUpdateTime(userDO.getUpdateTime().getTime());
+        userInfoModel.setCreateTime(userDO.getCreateTime());
+        userInfoModel.setUpdateTime(userDO.getUpdateTime());
         return userInfoModel;
     }
 
@@ -60,8 +62,7 @@ public class UserConvert {
         userDO.setHeadUrl(userInfoModel.getHeadAddress());
         userDO.setBiography(userInfoModel.getBiography());
         userDO.setLifeState(Integer.parseInt(userInfoModel.getLifeState()));
-        userDO.setBeginTime(TimeUtil.time2Date(userInfoModel.getBeginTime()));
-        userDO.setUpdateTime(TimeUtil.time2Date(System.currentTimeMillis()));
+        userDO.setUpdateTime(new Date());
         return userDO;
 
     }
