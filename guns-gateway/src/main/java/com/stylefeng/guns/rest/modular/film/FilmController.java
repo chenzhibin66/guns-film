@@ -1,5 +1,6 @@
 package com.stylefeng.guns.rest.modular.film;
 
+import com.stylefeng.guns.rest.modular.film.vo.BannerVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +25,6 @@ public class FilmController {
     @RequestMapping(value = "getIndex", method = RequestMethod.GET)
     public ResponseVO getIndex() {
         //获取banner信息
-
         //获取正在热映的电影
 
 
