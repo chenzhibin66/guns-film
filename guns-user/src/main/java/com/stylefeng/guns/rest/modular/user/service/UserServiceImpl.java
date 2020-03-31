@@ -7,7 +7,7 @@ import com.stylefeng.guns.api.user.vo.UserModel;
 import com.stylefeng.guns.core.util.MD5Util;
 import com.stylefeng.guns.rest.convert.UserConvert;
 import com.stylefeng.guns.rest.entity.UserDO;
-import com.stylefeng.guns.rest.dao.UserRepository;
+import com.stylefeng.guns.rest.modular.user.dao.UserRepository;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.stereotype.Component;
 
