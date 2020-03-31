@@ -19,7 +19,7 @@ public interface FilmServiceAPI {
      * @Param: []
      * @Return: com.stylefeng.guns.api.film.vo.BannerVO
      */
-    BannerVO getBanners();
+    List<BannerVO> getBanners();
 
     /**
      * 功能描述: 获取热门电影
@@ -28,6 +28,14 @@ public interface FilmServiceAPI {
      * @Return: com.stylefeng.guns.api.film.vo.FilmVO
      */
     FilmVO getHotFilms(boolean isLimit, int nums);
+
+    /**
+     * 功能描述: 获取即将上映影片
+     *
+     * @Param: [isLimit, nums]
+     * @Return: com.stylefeng.guns.api.film.vo.FilmVO
+     */
+    FilmVO getSoonFilms(boolean isLimit, int nums);
 
     /**
      * 功能描述: 票房排行榜

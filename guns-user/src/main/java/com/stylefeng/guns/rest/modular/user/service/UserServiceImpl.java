@@ -1,4 +1,4 @@
-package com.stylefeng.guns.rest.modular.user;
+package com.stylefeng.guns.rest.modular.user.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.api.user.UserAPI;
