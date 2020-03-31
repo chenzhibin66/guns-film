@@ -8,12 +8,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(scanBasePackages = {"com.stylefeng.guns"})
-@MapperScan("com.stylefeng.guns.rest.mapper")
+@MapperScan("com.stylefeng.guns.rest.dao.mapper")
 @EnableDubbo
-public class UserApplication {
+public class FilmApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(UserApplication.class, args);
+        SpringApplication.run(FilmApplication.class, args);
     }
 }

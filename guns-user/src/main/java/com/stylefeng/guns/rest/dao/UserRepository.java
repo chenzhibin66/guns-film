@@ -1,4 +1,4 @@
-package com.stylefeng.guns.rest.mapper;
+package com.stylefeng.guns.rest.dao;
 
 import com.stylefeng.guns.rest.entity.UserDO;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
