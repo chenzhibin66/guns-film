@@ -46,6 +46,14 @@ public interface FilmServiceAPI {
     List<FilmInfo> getBoxRanking();
 
     /**
+     * 功能描述:期待上映排行榜
+     *
+     * @Param: []
+     * @Return: java.util.List<com.stylefeng.guns.api.film.vo.FilmInfo>
+     */
+    List<FilmInfo> getExpectRanking();
+
+    /**
      * 功能描述: 获取前100
      *
      * @Param:
