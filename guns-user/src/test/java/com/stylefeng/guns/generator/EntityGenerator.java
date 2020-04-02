@@ -65,8 +65,8 @@ public class EntityGenerator {
         PackageConfig pc = new PackageConfig();
         pc.setParent(null);
         pc.setEntity("com.stylefeng.guns.rest.entity");
-        pc.setMapper("com.stylefeng.guns.rest.modular.user.dao.Repository");
-        pc.setXml("com.stylefeng.guns.rest.modular.user.dao.Repository.xml");
+        pc.setMapper("com.stylefeng.guns.rest.modular.user.dao.repository");
+        pc.setXml("com.stylefeng.guns.rest.modular.user.dao.repository.xml");
         pc.setService("TTT");       //本项目没用，生成之后删掉
         pc.setServiceImpl("TTT");   //本项目没用，生成之后删掉
         pc.setController("TTT");    //本项目没用，生成之后删掉

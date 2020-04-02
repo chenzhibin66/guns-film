@@ -15,7 +15,7 @@ public class GunsCodeGenerator {
 
         /**
          * Mybatis-Plus的代码生成器:
-         *      mp的代码生成器可以生成实体,Repository,mapper对应的xml,service
+         *      mp的代码生成器可以生成实体,repository,mapper对应的xml,service
          */
         GunsGeneratorConfig gunsGeneratorConfig = new GunsGeneratorConfig();
         gunsGeneratorConfig.doMpGeneration();

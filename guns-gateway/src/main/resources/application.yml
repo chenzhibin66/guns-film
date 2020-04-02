@@ -45,3 +45,4 @@ dubbo:
   registry:
     server: true
     address: zookeeper://localhost:2181
+    port: 20882

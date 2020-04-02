@@ -1,7 +1,9 @@
 package com.stylefeng.guns.rest.modular.film;
 
-import com.stylefeng.guns.rest.modular.film.vo.BannerVO;
+import com.stylefeng.guns.api.film.FilmServiceAPI;
+import com.stylefeng.guns.rest.modular.film.vo.FilmIndexVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVO;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/film/")
 public class FilmController {
 
+    @Reference(interfaceClass = FilmServiceAPI.class)
+    private FilmServiceAPI filmServiceAPI;
+
     /**
      * 获取首页信息接口
      * API网关
@@ -23,19 +28,15 @@ public class FilmController {
      * 2.同一个接口对外暴露,降低了前后端分离开发的难度和复杂度
      **/
     @RequestMapping(value = "getIndex", method = RequestMethod.GET)
-    public ResponseVO getIndex() {
-        //获取banner信息
-        //获取正在热映的电影
-
-
-        //即将上映的电影
-
-        //票房排行榜
-
-        //获取受欢迎的榜单
-
-        //获取前100
-        return null;
+    public ResponseVO<FilmIndexVO> getIndex() {
+        FilmIndexVO filmIndexVO = new FilmIndexVO();
+        filmIndexVO.setBanners(filmServiceAPI.getBanners());
+        filmIndexVO.setHotFilms(filmServiceAPI.getHotFilms(true, 8));
+        filmIndexVO.setSoonFilms(filmServiceAPI.getSoonFilms(true, 8));
+        filmIndexVO.setBoxRanking(filmServiceAPI.getBoxRanking());
+        filmIndexVO.setExpectRanking(filmServiceAPI.getExpectRanking());
+        filmIndexVO.setTop100(filmServiceAPI.getTop());
+        return ResponseVO.success(filmIndexVO);
     }
 
 
