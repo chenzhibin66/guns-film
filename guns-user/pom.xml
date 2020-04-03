@@ -53,10 +53,6 @@
             <artifactId>guns-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.stylefeng</groupId>
-            <artifactId>guns-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
@@ -77,6 +73,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

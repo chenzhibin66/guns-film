@@ -28,7 +28,7 @@ mybatis-plus:
 
 spring:
   application:
-    name: meeting-user
+    name: meeting-film
   datasource:
       url: jdbc:mysql://127.0.0.1:3306/dubbo?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
       username: root
@@ -39,10 +39,10 @@ logging:
   level.root: info
   level.com.stylefeng: debug
   path: logs/
-  file: meetingfilm-user.log
+  file: meetingfilm-film.log
 dubbo:
   registry:
     address: zookeeper://localhost:2181
     server: true
     protocol: dubbo
-    port: 20881
+    port: 20882

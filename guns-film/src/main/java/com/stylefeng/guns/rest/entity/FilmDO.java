@@ -1,5 +1,6 @@
 package com.stylefeng.guns.rest.entity;
 
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -15,6 +16,7 @@ import java.io.Serializable;
  * @author chenzhibin
  * @since 2020-03-31
  */
+@TableName("film")
 public class FilmDO extends Model<FilmDO> {
 
     private static final long serialVersionUID = 1L;
