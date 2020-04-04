@@ -1,8 +1,6 @@
 package com.stylefeng.guns.api.film;
 
-import com.stylefeng.guns.api.film.vo.BannerVO;
-import com.stylefeng.guns.api.film.vo.FilmInfo;
-import com.stylefeng.guns.api.film.vo.FilmVO;
+import com.stylefeng.guns.api.film.vo.*;
 
 import java.util.List;
 
@@ -60,4 +58,30 @@ public interface FilmServiceAPI {
      * @Return: java.util.List<com.stylefeng.guns.api.film.vo.FilmInfo>
      */
     List<FilmInfo> getTop();
+
+    //获取影片条件接口
+
+    /**
+     * 功能描述: 分类条件
+     *
+     * @Param: []
+     * @Return: java.util.List<com.stylefeng.guns.api.film.vo.CatVO>
+     */
+    List<CatVO> getCats();
+
+    /**
+     * 功能描述: 获取片源条件
+     *
+     * @Param: []
+     * @Return: java.util.List<com.stylefeng.guns.api.film.vo.SourceVO>
+     */
+    List<SourceVO> getSources();
+
+    /**
+     * 功能描述: 获取年代条件
+     *
+     * @Param: []
+     * @Return: java.util.List<com.stylefeng.guns.api.film.vo.YearVO>
+     */
+    List<YearVO> getYears();
 }

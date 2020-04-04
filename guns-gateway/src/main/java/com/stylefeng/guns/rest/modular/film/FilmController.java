@@ -6,6 +6,7 @@ import com.stylefeng.guns.rest.modular.vo.ResponseVO;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -38,5 +39,13 @@ public class FilmController {
         filmIndexVO.setExpectRanking(filmServiceAPI.getExpectRanking());
         filmIndexVO.setTop100(filmServiceAPI.getTop());
         return ResponseVO.success(IMG_PRE, filmIndexVO);
+    }
+
+    @RequestMapping(value = "getConditionList", method = RequestMethod.GET)
+    public ResponseVO getConditionList(@RequestParam(value = "catId", required = false, defaultValue = "99") String catId,
+                                       @RequestParam(value = "sourceId", required = false, defaultValue = "99") String sourceId,
+                                       @RequestParam(value = "yearId", required = false, defaultValue = "99") String yearId) {
+        //类型集合
+        return null;
     }
 }

@@ -3,16 +3,11 @@ package com.stylefeng.guns.rest.modular.film.service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.api.film.FilmServiceAPI;
-import com.stylefeng.guns.api.film.vo.BannerVO;
-import com.stylefeng.guns.api.film.vo.FilmInfo;
-import com.stylefeng.guns.api.film.vo.FilmVO;
+import com.stylefeng.guns.api.film.vo.*;
 import com.stylefeng.guns.rest.constant.FilmConstants;
 import com.stylefeng.guns.rest.convert.FilmConvert;
-import com.stylefeng.guns.rest.entity.BannerDO;
-import com.stylefeng.guns.rest.entity.FilmDO;
-import com.stylefeng.guns.rest.modular.film.dao.BannerRepository;
-import com.stylefeng.guns.rest.modular.film.dao.FilmInfoRepository;
-import com.stylefeng.guns.rest.modular.film.dao.FilmRepository;
+import com.stylefeng.guns.rest.entity.*;
+import com.stylefeng.guns.rest.modular.film.dao.*;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.stereotype.Component;
 
@@ -30,11 +25,16 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
 
     @Resource
     private BannerRepository bannerRepository;
-
     @Resource
     private FilmRepository filmRepository;
     @Resource
     private FilmInfoRepository filmInfoRepository;
+    @Resource
+    private CatDictRepository catDictRepository;
+    @Resource
+    private YearDictRepository yearDictRepository;
+    @Resource
+    private SourceDictRepository sourceDictRepository;
 
     @Override
     public List<BannerVO> getBanners() {
@@ -56,7 +56,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
             Page<FilmDO> page = new Page<>(1, nums);
             List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
             //组织filmInfo
-            filmInfos = FilmConvert.convert(filmDOS);
+            filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
             filmVO.setFilmNum(filmDOS.size());
             filmVO.setFilmInfos(filmInfos);
         } else {
@@ -75,7 +75,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
         if (isLimit) {
             Page<FilmDO> page = new Page<>(1, nums);
             List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
-            filmInfos = FilmConvert.convert(filmDOS);
+            filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
             filmVO.setFilmNum(filmDOS.size());
             filmVO.setFilmInfos(filmInfos);
         } else {
@@ -103,11 +103,33 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
         return getShowingFilm(FilmConstants.NOW_SHOWING, FilmConstants.CURRENT_PAGE, FilmConstants.PAGE_SIZE, FilmConstants.ORDER_BY_FILM_BOX_OFFICE);
     }
 
+    @Override
+    public List<CatVO> getCats() {
+
+        List<CatDictDO> catDicts = catDictRepository.selectList(null);
+        List<CatVO> catVOs = FilmConvert.convertToCatVO(catDicts);
+        return catVOs;
+    }
+
+    @Override
+    public List<SourceVO> getSources() {
+        List<SourceDictDO> sourceDictDOs = sourceDictRepository.selectList(null);
+        List<SourceVO> sourceVOs = FilmConvert.convertToSourceVO(sourceDictDOs);
+        return sourceVOs;
+    }
+
+    @Override
+    public List<YearVO> getYears() {
+        List<YearDictDO> yearDictDOs = yearDictRepository.selectList(null);
+        List<YearVO> yearVOs = FilmConvert.convert(yearDictDOs);
+        return yearVOs;
+    }
+
     public List<FilmInfo> getShowingFilm(String params, int current, int size, String orderByFiled) {
         EntityWrapper<FilmDO> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("film_status", params);
         Page<FilmDO> page = new Page<>(current, size, orderByFiled);
-        List<FilmInfo> filmInfos = FilmConvert.convert(filmRepository.selectPage(page, entityWrapper));
+        List<FilmInfo> filmInfos = FilmConvert.convertToFilmInfo(filmRepository.selectPage(page, entityWrapper));
         return filmInfos;
     }
 }
