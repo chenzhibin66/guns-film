@@ -55,7 +55,6 @@ public class FilmController {
         FilmConditionVO filmConditionVO = new FilmConditionVO();
         boolean flag = false;
         //类型集合
-        FilmConditionVO conditionVO = new FilmConditionVO();
         List<CatVO> cats = filmServiceAPI.getCats();
         List<CatVO> catResult = new ArrayList<>();
         CatVO cat = null;
@@ -73,14 +72,13 @@ public class FilmController {
             }
             catResult.add(catVO);
             //如果不存在,则默认将全部变为Active状态
-            if (!flag) {
-                cat.setActive(true);
-                catResult.add(cat);
-            } else {
-                cat.setActive(false);
-                catResult.add(cat);
-            }
-
+        }
+        if (!flag) {
+            cat.setActive(true);
+            catResult.add(cat);
+        } else {
+            cat.setActive(false);
+            catResult.add(cat);
         }
         //片源集合
         flag = false;
@@ -99,13 +97,14 @@ public class FilmController {
                 source.setActive(false);
             }
             sourceResult.add(source);
-            if (!flag) {
-                sourceVO.setActive(true);
-                sourceResult.add(sourceVO);
-            } else {
-                sourceVO.setActive(false);
-                sourceResult.add(sourceVO);
-            }
+
+        }
+        if (!flag) {
+            sourceVO.setActive(true);
+            sourceResult.add(sourceVO);
+        } else {
+            sourceVO.setActive(false);
+            sourceResult.add(sourceVO);
         }
         //年代集合
         flag = false;
