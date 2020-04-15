@@ -2,10 +2,12 @@ package com.stylefeng.guns.rest.modular.film;
 
 import com.stylefeng.guns.api.film.FilmServiceAPI;
 import com.stylefeng.guns.api.film.vo.CatVO;
+import com.stylefeng.guns.api.film.vo.FilmVO;
 import com.stylefeng.guns.api.film.vo.SourceVO;
 import com.stylefeng.guns.api.film.vo.YearVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmConditionVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmIndexVO;
+import com.stylefeng.guns.rest.modular.film.vo.FilmRequestVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVO;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,8 +42,8 @@ public class FilmController {
     public ResponseVO<FilmIndexVO> getIndex() {
         FilmIndexVO filmIndexVO = new FilmIndexVO();
         filmIndexVO.setBanners(filmServiceAPI.getBanners());
-        filmIndexVO.setHotFilms(filmServiceAPI.getHotFilms(true, 8));
-        filmIndexVO.setSoonFilms(filmServiceAPI.getSoonFilms(true, 8));
+        filmIndexVO.setHotFilms(filmServiceAPI.getHotFilms(true, 8, 1, 1, 99, 99, 99));
+        filmIndexVO.setSoonFilms(filmServiceAPI.getSoonFilms(true, 8, 1, 2, 99, 99, 99));
         filmIndexVO.setBoxRanking(filmServiceAPI.getBoxRanking());
         filmIndexVO.setExpectRanking(filmServiceAPI.getExpectRanking());
         filmIndexVO.setTop100(filmServiceAPI.getTop());
@@ -136,5 +138,27 @@ public class FilmController {
         filmConditionVO.setSourceInfo(sourceResult);
         filmConditionVO.setYearInfo(yearResult);
         return ResponseVO.success(filmConditionVO);
+    }
+
+    @RequestMapping(value = "getFilms", method = RequestMethod.GET)
+    public ResponseVO getFilms(FilmRequestVO filmRequestVO) {
+        FilmVO filmVO = null;
+        String img_pre = "http://img.meetingshop.cn/";
+        switch (filmRequestVO.getShowType()) {
+            case 2:
+                filmVO = filmServiceAPI.getSoonFilms(false, filmRequestVO.getPageSize(), filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(), filmRequestVO.getSourceId(), filmRequestVO.getYearId(), filmRequestVO.getCatId());
+                break;
+            case 3:
+                filmVO = filmServiceAPI.getClassicFilms(filmRequestVO.getPageSize(), filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(), filmRequestVO.getSourceId(), filmRequestVO.getYearId(), filmRequestVO.getCatId());
+                break;
+            default:
+                filmVO = filmServiceAPI.getHotFilms(false, filmRequestVO.getPageSize(), filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(), filmRequestVO.getSourceId(), filmRequestVO.getYearId(), filmRequestVO.getCatId());
+                break;
+        }
+        return ResponseVO.success(filmVO.getNowPage(), filmVO.getTotalPage(),
+                img_pre, filmVO.getFilmInfos());
     }
 }

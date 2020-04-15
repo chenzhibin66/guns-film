@@ -25,7 +25,7 @@ public interface FilmServiceAPI {
      * @Param: [isLimit, nums]
      * @Return: com.stylefeng.guns.api.film.vo.FilmVO
      */
-    FilmVO getHotFilms(boolean isLimit, int nums);
+    FilmVO getHotFilms(boolean isLimit, int nums, int nowPage, int sortId, int sourceId, int yearId, int catId);
 
     /**
      * 功能描述: 获取即将上映影片
@@ -33,7 +33,15 @@ public interface FilmServiceAPI {
      * @Param: [isLimit, nums]
      * @Return: com.stylefeng.guns.api.film.vo.FilmVO
      */
-    FilmVO getSoonFilms(boolean isLimit, int nums);
+    FilmVO getSoonFilms(boolean isLimit, int nums, int nowPage, int sortId, int sourceId, int yearId, int catId);
+
+    /**
+     * 功能描述: 获取经典影片
+     *
+     * @Param: [isLimit, nums, nowPage, sortId, sourceId, yearId, catId]
+     * @Return: com.stylefeng.guns.api.film.vo.FilmVO
+     */
+    FilmVO getClassicFilms(int nums, int nowPage, int sortId, int sourceId, int yearId, int catId);
 
     /**
      * 功能描述: 票房排行榜

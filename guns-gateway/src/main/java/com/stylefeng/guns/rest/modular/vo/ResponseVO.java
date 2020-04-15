@@ -24,6 +24,10 @@ public class ResponseVO<T> {
     //图片前缀
     private String  imgPre;
 
+    //分页使用
+    private int nowPage;
+    private int totalPage;
+
     private ResponseVO() {
     }
 
@@ -41,6 +45,17 @@ public class ResponseVO<T> {
         responseVO.setImgPre(imgPre);
         return responseVO;
     }
+
+    public static <T> ResponseVO success(int nowPage,int totalPage,String imgPre,T t) {
+        ResponseVO responseVO = new ResponseVO();
+        responseVO.setStatus(0);
+        responseVO.setData(t);
+        responseVO.setImgPre(imgPre);
+        responseVO.setNowPage(nowPage);
+        responseVO.setTotalPage(totalPage);
+        return responseVO;
+    }
+
 
     public static <T> ResponseVO success(String message) {
         ResponseVO responseVO = new ResponseVO();

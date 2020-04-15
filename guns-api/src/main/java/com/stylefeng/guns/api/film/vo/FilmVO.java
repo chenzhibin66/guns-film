@@ -22,4 +22,12 @@ public class FilmVO implements Serializable {
      * 电影信息列表
      **/
     private List<FilmInfo> filmInfos;
+    /**
+     * 当前页
+     **/
+    private int nowPage;
+    /**
+     * 总页数
+     **/
+    private int totalPage;
 }
