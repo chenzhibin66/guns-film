@@ -47,15 +47,50 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
     public FilmVO getHotFilms(boolean isLimit, int nums, int nowPage, int sortId, int sourceId, int yearId, int catId) {
         FilmVO filmVO = new FilmVO();
         List<FilmInfo> filmInfos = new ArrayList<>();
+
         //热门影片的限制条件
         EntityWrapper<FilmDO> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("film_status", FilmConstants.NOW_SHOWING);
+        entityWrapper.eq(FilmConstants.FILM_STATUS, FilmConstants.NOW_SHOWING);
         //判断是否是首页需要的内容
         if (isLimit) {
-            //如果是，则限制条数、限制内容为热门电影
-            isLimit(nums, entityWrapper, filmVO, filmInfos);
+            //如果是,则限制条数\限制内容为热门影片
+            Page<FilmDO> page = new Page<>(1, nums);
+            List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
+            filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
         } else {
-            isNotLimit(nowPage, nums, sortId, sourceId, yearId, catId, entityWrapper, filmVO, filmInfos);
+            //如果不是,则是列表页,同样需要限制内容为热门影片
+            Page<FilmDO> page = null;
+            // 根据sortId的不同，来组织不同的Page对象
+            // 1-按热门搜索，2-按时间搜索，3-按评价搜索
+            switch (sortId) {
+                case FilmConstants.QUERY_BY_HOT:
+                    page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_BOX_OFFICE);
+                    break;
+                case FilmConstants.QUERY_BY_TIME:
+                    page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_TIME);
+                    break;
+                case FilmConstants.QUERY_BY_EVALUATE:
+                    page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_SCORE);
+                    break;
+                default:
+                    page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_BOX_OFFICE);
+            }
+            // 如果sourceId,yearId,catId 不为99 ,则表示要按照对应的编号进行查询
+            judge(sourceId, yearId, catId, entityWrapper);
+            List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
+            filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
+
+            filmVO.setFilmNum(filmDOS.size());
+
+
+            // 需要总页数 totalCounts/nums -> 0 + 1 = 1
+            // 每页10条，我现在有6条 -> 1
+            int totalCounts = filmRepository.selectCount(entityWrapper);
+            int totalPages = (totalCounts / nums) + 1;
+
+            filmVO.setFilmInfos(filmInfos);
+            filmVO.setTotalPage(totalPages);
+            filmVO.setNowPage(nowPage);
         }
         return filmVO;
     }
@@ -65,11 +100,44 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
         FilmVO filmVO = new FilmVO();
         List<FilmInfo> filmInfos = new ArrayList<>();
         EntityWrapper<FilmDO> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("film_status", FilmConstants.WILL_SHOWING);
+        entityWrapper.eq(FilmConstants.FILM_STATUS, FilmConstants.WILL_SHOWING);
         if (isLimit) {
-            isLimit(nums, entityWrapper, filmVO, filmInfos);
+            Page<FilmDO> page = new Page<>(1, nums);
+            List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
+            filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
+            filmVO.setFilmNum(filmDOS.size());
+            filmVO.setFilmInfos(filmInfos);
         } else {
-            isNotLimit(nowPage,nums,sortId,sourceId,yearId,catId,entityWrapper,filmVO,filmInfos);
+            // 如果不是，则是列表页，同样需要限制内容为即将上映影片
+            Page<FilmDO> page = null;
+            // 根据sortId的不同，来组织不同的Page对象
+            // 1-按热门搜索，2-按时间搜索，3-按评价搜索
+            switch (sortId) {
+                case FilmConstants.QUERY_BY_HOT:
+                    page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_PRESALENUM);
+                    break;
+                case FilmConstants.QUERY_BY_TIME:
+                    page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_TIME);
+                    break;
+                case FilmConstants.QUERY_BY_EVALUATE:
+                    page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_PRESALENUM);
+                    break;
+                default:
+                    page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_PRESALENUM);
+            }
+            judge(sourceId, yearId, catId, entityWrapper);
+            List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
+
+            filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
+            filmVO.setFilmNum(filmDOS.size());
+            // 需要总页数 totalCounts/nums -> 0 + 1 = 1
+            // 每页10条，我现在有6条 -> 1
+            int totalCounts = filmRepository.selectCount(entityWrapper);
+            int totalPages = (totalCounts / nums) + 1;
+
+            filmVO.setFilmInfos(filmInfos);
+            filmVO.setTotalPage(totalPages);
+            filmVO.setNowPage(nowPage);
         }
         return filmVO;
     }
@@ -81,13 +149,27 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
 
         //即将上映影片的限制条件
         EntityWrapper<FilmDO> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("film_status", FilmConstants.CLASSIC_FILM);
+        entityWrapper.eq(FilmConstants.FILM_STATUS, FilmConstants.CLASSIC_FILM);
 
         //如果不是,则是列表页,同样需要限制内容为即将上映影片
         Page<FilmDO> page = null;
         // 根据sortId的不同，来组织不同的Page对象
         // 1-按热门搜索，2-按时间搜索，3-按评价搜索
-        queryBySortId(sortId, nowPage, nums, page);
+        switch (sortId) {
+            case FilmConstants.QUERY_BY_HOT:
+                page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_BOX_OFFICE);
+                break;
+            case FilmConstants.QUERY_BY_TIME:
+                page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_TIME);
+                break;
+            case FilmConstants.QUERY_BY_EVALUATE:
+                page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_SCORE);
+                break;
+            default:
+                page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_BOX_OFFICE);
+                break;
+
+        }
         // 如果sourceId,yearId,catId 不为99 ,则表示要按照对应的编号进行查询
         judge(sourceId, yearId, catId, entityWrapper);
 
@@ -151,7 +233,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
 
     public List<FilmInfo> getShowingFilm(String params, int current, int size, String orderByFiled) {
         EntityWrapper<FilmDO> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("film_status", params);
+        entityWrapper.eq(FilmConstants.FILM_STATUS, params);
         Page<FilmDO> page = new Page<>(current, size, orderByFiled);
         List<FilmInfo> filmInfos = FilmConvert.convertToFilmInfo(filmRepository.selectPage(page, entityWrapper));
         return filmInfos;
@@ -162,7 +244,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
             case FilmConstants.QUERY_BY_TIME:
                 page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_TIME);
                 break;
-            case 3:
+            case FilmConstants.QUERY_BY_EVALUATE:
                 page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_SCORE);
                 break;
             default:
@@ -170,6 +252,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
                 break;
         }
     }
+
 
     private void judge(int sourceId, int yearId, int catId, EntityWrapper<FilmDO> entityWrapper) {
         if (sourceId != 99) {
@@ -183,35 +266,5 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
             String catStr = "%#" + catId + "#%";
             entityWrapper.like("film_cats", catStr);
         }
-    }
-
-    private void isLimit(int nums, EntityWrapper<FilmDO> entityWrapper, FilmVO filmVO, List<FilmInfo> filmInfos) {
-        Page<FilmDO> page = new Page<>(1, nums);
-        List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
-        //组织filmInfo
-        filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
-        filmVO.setFilmNum(filmDOS.size());
-        filmVO.setFilmInfos(filmInfos);
-    }
-
-    private void isNotLimit(int nowPage, int nums, int sortId, int sourceId, int yearId, int catId, EntityWrapper<FilmDO> entityWrapper, FilmVO filmVO, List<FilmInfo> filmInfos) {
-
-        // 如果不是，则是列表页，同样需要限制内容为热映影片
-        Page<FilmDO> page = null;
-        // 根据sortId的不同，来组织不同的Page对象
-        // 1-按热门搜索，2-按时间搜索，3-按评价搜索
-        queryBySortId(nowPage, nums, sortId, page);
-        // 如果sourceId,yearId,catId 不为99 ,则表示要按照对应的编号进行查询
-        judge(sourceId, yearId, catId, entityWrapper);
-        List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
-        filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
-
-        // 需要总页数 totalCounts/nums -> 0 + 1 = 1
-        int totalCounts = filmRepository.selectCount(entityWrapper);
-        int totalPages = (totalCounts / nums) + 1;
-
-        filmVO.setFilmInfos(filmInfos);
-        filmVO.setTotalPage(totalPages);
-        filmVO.setNowPage(nowPage);
     }
 }

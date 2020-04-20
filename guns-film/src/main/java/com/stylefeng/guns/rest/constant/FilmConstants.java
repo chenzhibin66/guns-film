@@ -27,7 +27,9 @@ public class FilmConstants {
     /**
      * 1-按热门搜索，2-按时间搜索，3-按评价搜索
      */
-    public static final int ORDER_BY_HOT = 1;
+    public static final int QUERY_BY_HOT = 1;
     public static final int QUERY_BY_TIME = 2;
     public static final int QUERY_BY_EVALUATE = 3;
+
+    public static final String FILM_STATUS = "film_status";
 }
