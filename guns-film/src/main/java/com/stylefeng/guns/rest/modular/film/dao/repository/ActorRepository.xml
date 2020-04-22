@@ -4,9 +4,18 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.entity.ActorDO">
-        <id column="UUID" property="uuid" />
-        <result column="actor_name" property="actorName" />
-        <result column="actor_img" property="actorImg" />
+        <id column="UUID" property="uuid"/>
+        <result column="actor_name" property="actorName"/>
+        <result column="actor_img" property="actorImg"/>
     </resultMap>
+
+    <select id="getActors" parameterType="java.lang.String" resultType="com.stylefeng.guns.api.film.vo.ActorVO">
+     select a.actor_name as directorName,
+            a.actor_img as imgAddress,
+            f.role_name as roleName
+     from actor a ,film_actor f
+     WHERE a.UUID = f.actor_id
+     and f.film_id =#{filmId};
+    </select>
 
 </mapper>

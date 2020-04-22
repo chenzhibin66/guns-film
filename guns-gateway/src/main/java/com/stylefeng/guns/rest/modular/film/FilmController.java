@@ -1,10 +1,7 @@
 package com.stylefeng.guns.rest.modular.film;
 
 import com.stylefeng.guns.api.film.FilmServiceAPI;
-import com.stylefeng.guns.api.film.vo.CatVO;
-import com.stylefeng.guns.api.film.vo.FilmVO;
-import com.stylefeng.guns.api.film.vo.SourceVO;
-import com.stylefeng.guns.api.film.vo.YearVO;
+import com.stylefeng.guns.api.film.vo.*;
 import com.stylefeng.guns.rest.modular.film.vo.FilmConditionVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmIndexVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmRequestVO;
@@ -175,7 +172,30 @@ public class FilmController {
     @RequestMapping(value = "films/{searchParam}", method = RequestMethod.GET)
     public ResponseVO films(@PathVariable("searchParam") String searchParam, int searchType) {
         //根据searchType,判断查询类型
-        return null;
+        FilmDetailVO filmDetailVO = filmServiceAPI.getFilmDetail(searchType, searchParam);
+        String filmId = filmDetailVO.getFilmId();
+        //查询影片的详细信息----Dubbo的异步获取
+        //获取影片信息
+        FilmDescVO filmDescVO = filmServiceAPI.getFilmDesc(filmId);
+        //获取图片信息
+        ImgVO imgVO = filmServiceAPI.getImgs(filmId);
+        //获取导演信息
+        ActorVO directorVO = filmServiceAPI.getDirector(filmId);
+        //获取演员信息
+        List<ActorVO> actors = filmServiceAPI.getActors(filmId);
+
+        InfoRequestVO infoRequestVO = new InfoRequestVO();
+        ActorRequestVO actorRequestVO = new ActorRequestVO();
+        actorRequestVO.setActors(actors);
+        actorRequestVO.setDirector(directorVO);
+
+        infoRequestVO.setActors(actorRequestVO);
+        infoRequestVO.setBiography(filmDescVO.getBiography());
+        infoRequestVO.setFilmId(filmId);
+        infoRequestVO.setImgVO(imgVO);
+
+        filmDetailVO.setInfo04(infoRequestVO);
+        return ResponseVO.success("http://img.meetingshop.cn/", filmDetailVO);
 
     }
 }

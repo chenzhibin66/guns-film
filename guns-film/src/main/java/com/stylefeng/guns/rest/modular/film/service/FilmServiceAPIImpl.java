@@ -35,6 +35,8 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
     private YearDictRepository yearDictRepository;
     @Resource
     private SourceDictRepository sourceDictRepository;
+    @Resource
+    private ActorRepository actorRepository;
 
     @Override
     public List<BannerVO> getBanners() {
@@ -233,9 +235,58 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
 
     @Override
     public FilmDetailVO getFilmDetail(int searchType, String searchParam) {
+        FilmDetailVO filmDetailVO = null;
         //searchType 1-按名称查找 2-按id查找
-        
-        return null;
+        if (searchType == 1) {
+            filmDetailVO = filmRepository.getFilmDetailByName(searchParam);
+        } else {
+            filmDetailVO = filmRepository.getFilmDetailById(searchParam);
+        }
+        return filmDetailVO;
+    }
+
+    @Override
+    public FilmDescVO getFilmDesc(String filmId) {
+        FilmInfoDO filmInfoDO = getFilmInfo(filmId);
+
+        FilmDescVO filmDescVO = new FilmDescVO();
+        filmDescVO.setBiography(filmInfoDO.getBiography());
+        filmDescVO.setFilmId(filmId);
+        return filmDescVO;
+    }
+
+    @Override
+    public ImgVO getImgs(String filmId) {
+        FilmInfoDO filmInfoDO = getFilmInfo(filmId);
+        String filmImgStr = filmInfoDO.getFilmImgs();
+        String[] filmImgs = filmImgStr.split(",");
+
+        ImgVO imgVO = new ImgVO();
+        imgVO.setMainImg(filmImgs[0]);
+        imgVO.setImg01(filmImgs[1]);
+        imgVO.setImg02(filmImgs[2]);
+        imgVO.setImg03(filmImgs[3]);
+        imgVO.setImg04(filmImgs[4]);
+        return imgVO;
+    }
+
+    @Override
+    public ActorVO getDirector(String filmId) {
+        FilmInfoDO filmInfoDO = getFilmInfo(filmId);
+        Integer directorId = filmInfoDO.getDirectorId();
+        ActorDO actorDO = actorRepository.selectById(directorId);
+        ActorVO actorVO = new ActorVO();
+        actorVO.setImgAddress(actorDO.getActorImg());
+        actorVO.setDirectorName(actorDO.getActorName());
+
+        return actorVO;
+    }
+
+    @Override
+    public List<ActorVO> getActors(String filmId) {
+        FilmInfoDO filmInfoDO = getFilmInfo(filmId);
+        List<ActorVO> actors = actorRepository.getActors(filmId);
+        return actors;
     }
 
     public List<FilmInfo> getShowingFilm(String params, int current, int size, String orderByFiled) {
@@ -273,5 +324,12 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
             String catStr = "%#" + catId + "#%";
             entityWrapper.like("film_cats", catStr);
         }
+    }
+
+    private FilmInfoDO getFilmInfo(String filmId) {
+        FilmInfoDO filmInfoDO = new FilmInfoDO();
+        filmInfoDO.setFilmId(filmId);
+        filmInfoDO = filmInfoRepository.selectOne(filmInfoDO);
+        return filmInfoDO;
     }
 }
