@@ -4,19 +4,62 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.entity.FilmDO">
-        <id column="UUID" property="uuid" />
-        <result column="film_name" property="filmName" />
-        <result column="film_type" property="filmType" />
-        <result column="img_address" property="imgAddress" />
-        <result column="film_score" property="filmScore" />
-        <result column="film_preSaleNum" property="filmPresalenum" />
-        <result column="film_box_office" property="filmBoxOffice" />
-        <result column="film_source" property="filmSource" />
-        <result column="film_cats" property="filmCats" />
-        <result column="film_area" property="filmArea" />
-        <result column="film_date" property="filmDate" />
-        <result column="film_time" property="filmTime" />
-        <result column="film_status" property="filmStatus" />
+        <id column="UUID" property="uuid"/>
+        <result column="film_name" property="filmName"/>
+        <result column="film_type" property="filmType"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_score" property="filmScore"/>
+        <result column="film_preSaleNum" property="filmPresalenum"/>
+        <result column="film_box_office" property="filmBoxOffice"/>
+        <result column="film_source" property="filmSource"/>
+        <result column="film_cats" property="filmCats"/>
+        <result column="film_area" property="filmArea"/>
+        <result column="film_date" property="filmDate"/>
+        <result column="film_time" property="filmTime"/>
+        <result column="film_status" property="filmStatus"/>
     </resultMap>
 
+    <select id="getFilmDetailByName" parameterType="java.lang.String"
+            resultType="com.stylefeng.guns.api.film.vo.FilmDetailVO">
+   select
+             f.film_name as filmName,
+             i.film_en_name as filmEnName,
+             f.img_address as imgAddress,
+             i.film_score as score,
+             i.film_score_num as scoreNum,
+             f.film_box_office as totalBox,
+            (SELECT GROUP_CONCAT(show_name) from cat_dict t
+             where FIND_IN_SET(t.UUID,
+           (SELECT REPLACE(TRIM(BOTH '#' FROM film_cats),'#',',') from film WHERE film.UUID =t.UUID ))
+           ) as info1,
+            CONCAT((SELECT show_name FROM source_dict t WHERE t.UUID=f.UUID),'/', i.film_length,'分钟') as info2,
+            CONCAT(f.film_time,'/', (SELECT show_name FROM source_dict t WHERE t.UUID=f.UUID),'上映') as info3,
+            i.film_length,
+            f.film_time
+        from film f,film_info i
+        where f.UUID = i.UUID
+        and f.film_name LIKE #{filmName};
+    </select>
+
+    <select id="getFilmDetailById" parameterType="java.lang.String"
+            resultType="com.stylefeng.guns.api.film.vo.FilmDetailVO">
+       select
+             f.film_name as filmName,
+             i.film_en_name as filmEnName,
+             f.img_address as imgAddress,
+             i.film_score as score,
+             i.film_score_num as scoreNum,
+             f.film_box_office as totalBox,
+            (SELECT GROUP_CONCAT(show_name) from cat_dict t
+             where FIND_IN_SET(t.UUID,
+           (SELECT REPLACE(TRIM(BOTH '#' FROM film_cats),'#',',') from film WHERE film.UUID =t.UUID ))
+           ) as info1,
+            CONCAT((SELECT show_name FROM source_dict t WHERE t.UUID=f.UUID),'/', i.film_length,'分钟') as info2,
+            CONCAT(f.film_time,'/', (SELECT show_name FROM source_dict t WHERE t.UUID=f.UUID),'上映') as info3,
+            i.film_length,
+            f.film_time
+        from film f,film_info i
+        where f.UUID = i.UUID
+        and f.UUID = #{uuid};
+    </select>
 </mapper>

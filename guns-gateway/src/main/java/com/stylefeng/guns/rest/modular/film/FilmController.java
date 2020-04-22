@@ -10,10 +10,7 @@ import com.stylefeng.guns.rest.modular.film.vo.FilmIndexVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmRequestVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVO;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,21 +141,41 @@ public class FilmController {
     public ResponseVO getFilms(FilmRequestVO filmRequestVO) {
         FilmVO filmVO = null;
         String img_pre = "http://img.meetingshop.cn/";
+        // 根据showType判断影片查询类型
         switch (filmRequestVO.getShowType()) {
+            case 1:
+                filmVO = filmServiceAPI.getHotFilms(
+                        false, filmRequestVO.getPageSize(), filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(), filmRequestVO.getSourceId(), filmRequestVO.getYearId(),
+                        filmRequestVO.getCatId());
+                break;
             case 2:
-                filmVO = filmServiceAPI.getSoonFilms(false, filmRequestVO.getPageSize(), filmRequestVO.getNowPage(),
-                        filmRequestVO.getSortId(), filmRequestVO.getSourceId(), filmRequestVO.getYearId(), filmRequestVO.getCatId());
+                filmVO = filmServiceAPI.getSoonFilms(
+                        false, filmRequestVO.getPageSize(), filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(), filmRequestVO.getSourceId(), filmRequestVO.getYearId(),
+                        filmRequestVO.getCatId());
                 break;
             case 3:
-                filmVO = filmServiceAPI.getClassicFilms(filmRequestVO.getPageSize(), filmRequestVO.getNowPage(),
-                        filmRequestVO.getSortId(), filmRequestVO.getSourceId(), filmRequestVO.getYearId(), filmRequestVO.getCatId());
+                filmVO = filmServiceAPI.getClassicFilms(
+                        filmRequestVO.getPageSize(), filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(), filmRequestVO.getSourceId(),
+                        filmRequestVO.getYearId(), filmRequestVO.getCatId());
                 break;
             default:
-                filmVO = filmServiceAPI.getHotFilms(false, filmRequestVO.getPageSize(), filmRequestVO.getNowPage(),
-                        filmRequestVO.getSortId(), filmRequestVO.getSourceId(), filmRequestVO.getYearId(), filmRequestVO.getCatId());
+                filmVO = filmServiceAPI.getHotFilms(
+                        false, filmRequestVO.getPageSize(), filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(), filmRequestVO.getSourceId(), filmRequestVO.getYearId(),
+                        filmRequestVO.getCatId());
                 break;
         }
         return ResponseVO.success(filmVO.getNowPage(), filmVO.getTotalPage(),
                 img_pre, filmVO.getFilmInfos());
+    }
+
+    @RequestMapping(value = "films/{searchParam}", method = RequestMethod.GET)
+    public ResponseVO films(@PathVariable("searchParam") String searchParam, int searchType) {
+        //根据searchType,判断查询类型
+        return null;
+
     }
 }

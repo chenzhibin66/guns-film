@@ -92,4 +92,12 @@ public interface FilmServiceAPI {
      * @Return: java.util.List<com.stylefeng.guns.api.film.vo.YearVO>
      */
     List<YearVO> getYears();
+
+    /**
+     * 功能描述: 根据影片id或者名称获取影片信息
+     *
+     * @Param: [searchType, searchParam]
+     * @Return: com.stylefeng.guns.api.film.vo.FilmDetailVO
+     */
+    FilmDetailVO getFilmDetail(int searchType, String searchParam);
 }

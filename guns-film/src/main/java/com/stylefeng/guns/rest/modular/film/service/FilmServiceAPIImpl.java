@@ -231,6 +231,13 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
         return yearVOs;
     }
 
+    @Override
+    public FilmDetailVO getFilmDetail(int searchType, String searchParam) {
+        //searchType 1-按名称查找 2-按id查找
+        
+        return null;
+    }
+
     public List<FilmInfo> getShowingFilm(String params, int current, int size, String orderByFiled) {
         EntityWrapper<FilmDO> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq(FilmConstants.FILM_STATUS, params);
