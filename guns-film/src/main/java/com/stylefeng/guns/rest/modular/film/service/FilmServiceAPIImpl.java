@@ -238,7 +238,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
         FilmDetailVO filmDetailVO = null;
         //searchType 1-按名称查找 2-按id查找
         if (searchType == 1) {
-            filmDetailVO = filmRepository.getFilmDetailByName(searchParam);
+            filmDetailVO = filmRepository.getFilmDetailByName("%" + searchParam + "%");
         } else {
             filmDetailVO = filmRepository.getFilmDetailById(searchParam);
         }
@@ -267,6 +267,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
         imgVO.setImg02(filmImgs[2]);
         imgVO.setImg03(filmImgs[3]);
         imgVO.setImg04(filmImgs[4]);
+
         return imgVO;
     }
 
@@ -284,7 +285,6 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
 
     @Override
     public List<ActorVO> getActors(String filmId) {
-        FilmInfoDO filmInfoDO = getFilmInfo(filmId);
         List<ActorVO> actors = actorRepository.getActors(filmId);
         return actors;
     }
@@ -296,21 +296,6 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
         List<FilmInfo> filmInfos = FilmConvert.convertToFilmInfo(filmRepository.selectPage(page, entityWrapper));
         return filmInfos;
     }
-
-    private void queryBySortId(int nowPage, int nums, int sortId, Page<FilmDO> page) {
-        switch (sortId) {
-            case FilmConstants.QUERY_BY_TIME:
-                page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_TIME);
-                break;
-            case FilmConstants.QUERY_BY_EVALUATE:
-                page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_SCORE);
-                break;
-            default:
-                page = new Page<>(nowPage, nums, FilmConstants.ORDER_BY_FILM_BOX_OFFICE);
-                break;
-        }
-    }
-
 
     private void judge(int sourceId, int yearId, int catId, EntityWrapper<FilmDO> entityWrapper) {
         if (sourceId != 99) {
