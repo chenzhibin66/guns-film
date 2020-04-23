@@ -3,7 +3,6 @@ package com.stylefeng.guns.rest.modular.film.service;
 import com.stylefeng.guns.api.film.FilmAsyncServiceAPI;
 import com.stylefeng.guns.api.film.vo.ActorVO;
 import com.stylefeng.guns.api.film.vo.FilmDescVO;
-import com.stylefeng.guns.api.film.vo.FilmInfo;
 import com.stylefeng.guns.api.film.vo.ImgVO;
 import com.stylefeng.guns.rest.entity.ActorDO;
 import com.stylefeng.guns.rest.entity.FilmInfoDO;
