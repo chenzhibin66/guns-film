@@ -145,6 +145,16 @@ public class FilmController {
     public ResponseVO getFilms(FilmRequestVO filmRequestVO) {
         FilmVO filmVO = null;
         String img_pre = "http://img.meetingshop.cn/";
+        //如果为空,则传入默认值
+        if (null == filmRequestVO) {
+            filmRequestVO.setShowType(1);
+            filmRequestVO.setSortId(1);
+            filmRequestVO.setCatId(99);
+            filmRequestVO.setSourceId(99);
+            filmRequestVO.setYearId(99);
+            filmRequestVO.setNowPage(1);
+            filmRequestVO.setPageSize(18);
+        }
         // 根据showType判断影片查询类型
         switch (filmRequestVO.getShowType()) {
             case 1:
