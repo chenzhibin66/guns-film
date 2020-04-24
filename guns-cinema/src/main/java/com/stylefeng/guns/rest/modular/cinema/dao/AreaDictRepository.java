@@ -1,4 +1,4 @@
-package com.stylefeng.guns.rest.modular.film.dao;
+package com.stylefeng.guns.rest.modular.cinema.dao;
 
 import com.stylefeng.guns.rest.entity.AreaDictDO;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * </p>
  *
  * @author chenzhibin
- * @since 2020-03-31
+ * @since 2020-04-24
  */
 public interface AreaDictRepository extends BaseMapper<AreaDictDO> {
 
