@@ -62,4 +62,21 @@ FROM
     WHERE f.hall_id = h.UUID
     AND f.UUID =#{fieldId}
 	</select>
+    
+    <select id="getFilmInfoById" parameterType="java.lang.Integer" resultType="com.stylefeng.guns.api.cinema.vo.FilmInfoVO">
+        SELECT
+	f.film_id as filmId,
+	i.film_name as filmName,
+	i.film_length as filmLength,
+	i.film_language as filmType,
+	i.film_cats as filmCats,
+	i.actors as actors,
+	i.img_address as imgAddress
+FROM
+	field f,
+	hall_film_info i
+WHERE
+	f.film_id = i.film_id
+	AND f.UUID =#{fieldId}
+    </select>
 </mapper>

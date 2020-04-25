@@ -235,7 +235,7 @@ public class CinemaServiceAPIImpl implements CinemaServiceAPI {
      */
     @Override
     public FilmInfoVO getFilmInfoByFieldId(int fieldId) {
-
-        return null;
+        FilmInfoVO filmInfoVO = fieldRepository.getFilmInfoById(fieldId);
+        return filmInfoVO;
     }
 }

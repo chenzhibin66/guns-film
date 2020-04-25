@@ -21,4 +21,6 @@ public interface FieldRepository extends BaseMapper<FieldDO> {
     List<FilmInfoVO> getFilmInfos(@Param("cinemaId") int cinemaId);
 
     HallInfoVO getHallInfo(@Param("fieldId") int field);
+
+    FilmInfoVO getFilmInfoById(@Param("fieldId") int field);
 }
