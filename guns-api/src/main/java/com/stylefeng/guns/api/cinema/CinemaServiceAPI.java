@@ -32,9 +32,9 @@ public interface CinemaServiceAPI {
      * 功能描述:获取行政区域列表
      *
      * @Param: [areaId]
-     * @Return: java.util.List<com.stylefeng.guns.api.cinema.vo.AreaVo>
+     * @Return: java.util.List<com.stylefeng.guns.api.cinema.vo.AreaVO>
      */
-    List<AreaVo> getAreas(int areaId);
+    List<AreaVO> getAreas(int areaId);
 
     /**
      * 功能描述:获取影厅类型列表
@@ -58,7 +58,7 @@ public interface CinemaServiceAPI {
      * @Param: [cinemaId]
      * @Return: com.stylefeng.guns.api.cinema.vo.FilmInfoVO
      */
-    FilmInfoVO getFilmInfoByCinemaId(int cinemaId);
+    List<FilmInfoVO> getFilmInfoByCinemaId(int cinemaId);
 
     /**
      * 功能描述: 根据放映场次ID获取放映信息
@@ -66,7 +66,7 @@ public interface CinemaServiceAPI {
      * @Param: [fieldId]
      * @Return: com.stylefeng.guns.api.cinema.vo.FilmFieldVO
      */
-    FilmFieldVO getFilmFieldInfo(int fieldId);
+    HallInfoVO getFilmFieldInfo(int fieldId);
 
     /**
      * 功能描述: 根据放映场次查询播放的电影编号,然后根据电影编号获取对应的电影信息

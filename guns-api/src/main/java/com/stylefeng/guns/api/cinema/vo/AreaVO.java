@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @time 2020/4/23 17:03
  */
 @Data
-public class AreaVo implements Serializable {
+public class AreaVO implements Serializable {
     private static final long serialVersionUID = -9004262192475982433L;
     /**
      * 行政区域id
