@@ -67,7 +67,7 @@ public class EntityGenerator {
         pc.setParent(null);
         pc.setEntity("com.stylefeng.guns.rest.entity");
         pc.setMapper("com.stylefeng.guns.rest.modular.film.dao");
-        pc.setXml("com.stylefeng.guns.rest.modular.film.dao.repository");
+        pc.setXml("com.stylefeng.guns.rest.modular.film.dao.mapper");
         pc.setService("TTT");       //本项目没用，生成之后删掉
         pc.setServiceImpl("TTT");   //本项目没用，生成之后删掉
         pc.setController("TTT");    //本项目没用，生成之后删掉

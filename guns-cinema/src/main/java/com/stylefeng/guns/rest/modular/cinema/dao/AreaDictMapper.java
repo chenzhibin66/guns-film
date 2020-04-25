@@ -1,6 +1,6 @@
 package com.stylefeng.guns.rest.modular.cinema.dao;
 
-import com.stylefeng.guns.rest.entity.HallDictDO;
+import com.stylefeng.guns.rest.entity.AreaDictDO;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @author chenzhibin
  * @since 2020-04-24
  */
-public interface HallDictRepository extends BaseMapper<HallDictDO> {
+public interface AreaDictMapper extends BaseMapper<AreaDictDO> {
 
 }

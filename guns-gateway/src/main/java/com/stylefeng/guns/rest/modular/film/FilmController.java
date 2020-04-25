@@ -25,10 +25,10 @@ import java.util.concurrent.Future;
 public class FilmController {
 
     private static final String IMG_PRE = "http//img/pre/";
-    @Reference(interfaceClass = FilmServiceAPI.class)
+    @Reference(interfaceClass = FilmServiceAPI.class,check = false)
     private FilmServiceAPI filmServiceAPI;
 
-    @Reference(interfaceClass = FilmAsyncServiceAPI.class, async = true)
+    @Reference(interfaceClass = FilmAsyncServiceAPI.class, async = true,check = false)
     private FilmAsyncServiceAPI filmAsyncServiceAPI;
 
     /**

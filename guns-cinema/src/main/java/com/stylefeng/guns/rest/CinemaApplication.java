@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = {"com.stylefeng.guns"})
-@MapperScan("com.stylefeng.guns.rest.modular.film.dao")
+@MapperScan("com.stylefeng.guns.rest.modular.cinema.dao")
 @EnableDubbo
 public class CinemaApplication {
 

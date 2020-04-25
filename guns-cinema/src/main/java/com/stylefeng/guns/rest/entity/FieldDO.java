@@ -1,5 +1,6 @@
 package com.stylefeng.guns.rest.entity;
 
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
@@ -14,6 +15,7 @@ import java.io.Serializable;
  * @author chenzhibin
  * @since 2020-04-24
  */
+@TableName("field")
 public class FieldDO extends Model<FieldDO> {
 
     private static final long serialVersionUID = 1L;

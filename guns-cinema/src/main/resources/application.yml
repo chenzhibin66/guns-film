@@ -13,7 +13,7 @@ server:
   port: 8085 #项目端口
 
 mybatis-plus:
-  mapper-locations: classpath*:com/stylefeng/guns/rest/**/repository/*.xml
+  mapper-locations: classpath*:com/stylefeng/guns/rest/**/mapper/*.xml
   typeAliasesPackage: com.stylefeng.guns.rest.entity
   global-config:
     id-type: 0  #0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)

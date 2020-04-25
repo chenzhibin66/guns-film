@@ -27,17 +27,17 @@ import java.util.List;
 public class CinemaServiceAPIImpl implements CinemaServiceAPI {
 
     @Resource
-    private CinemaRepository cinemaRepository;
+    private CinemaMapper cinemaMapper;
     @Resource
-    private AreaDictRepository areaDictRepository;
+    private AreaDictMapper areaDictMapper;
     @Resource
-    private BrandDictRepository brandDictRepository;
+    private BrandDictMapper brandDictMapper;
     @Resource
-    private HallDictRepository hallDictRepository;
+    private HallDictMapper hallDictMapper;
     @Resource
-    private HallFilmInfoRepository hallFilmInfoRepository;
+    private HallFilmInfoMapper hallFilmInfoMapper;
     @Resource
-    private FieldRepository fieldRepository;
+    private FieldMapper fieldMapper;
 
     /**
      * 功能描述: 查询影院列表
@@ -50,22 +50,21 @@ public class CinemaServiceAPIImpl implements CinemaServiceAPI {
         List<CinemaVO> cinemaVOS = new ArrayList<>();
         EntityWrapper<CinemaDO> entityWrapper = new EntityWrapper<>();
         //判断有没有传入查询条件,没有则为默认全部
-        if (null == cinemaQueryVO) {
-            cinemaQueryVO.setBrandId(99);
-            cinemaQueryVO.setDistrictId(99);
-            cinemaQueryVO.setHallType(99);
-            cinemaQueryVO.setNowPage(1);
-            cinemaQueryVO.setPageSize(12);
-        }
         Page<CinemaDO> page = new Page<>(cinemaQueryVO.getNowPage(), cinemaQueryVO.getPageSize());
 
-        entityWrapper.eq(CinemaConstants.BRAND_ID, cinemaQueryVO.getBrandId());
-        entityWrapper.eq(CinemaConstants.AREA_ID, cinemaQueryVO.getDistrictId());
-        entityWrapper.like(CinemaConstants.HALL_IDS, "%+" + cinemaQueryVO.getHallType() + "+%");
-        List<CinemaDO> cinemas = cinemaRepository.selectPage(page, entityWrapper);
+        if (cinemaQueryVO.getBrandId() != CinemaConstants.ALL) {
+            entityWrapper.eq(CinemaConstants.BRAND_ID, cinemaQueryVO.getBrandId());
+        }
+        if (cinemaQueryVO.getDistrictId() != CinemaConstants.ALL) {
+            entityWrapper.eq(CinemaConstants.AREA_ID, cinemaQueryVO.getDistrictId());
+        }
+        if (cinemaQueryVO.getHallType() != CinemaConstants.ALL) {
+            entityWrapper.like(CinemaConstants.HALL_IDS, "%#+" + cinemaQueryVO.getHallType() + "+#%");
+        }
+        List<CinemaDO> cinemas = cinemaMapper.selectPage(page, entityWrapper);
         cinemaVOS = CinemaConvert.convert(cinemas);
 
-        long counts = cinemaRepository.selectCount(entityWrapper);
+        long counts = cinemaMapper.selectCount(entityWrapper);
         Page<CinemaVO> result = new Page<>();
         result.setRecords(cinemaVOS);
         result.setSize(cinemaQueryVO.getPageSize());
@@ -85,13 +84,13 @@ public class CinemaServiceAPIImpl implements CinemaServiceAPI {
         List<BrandVO> brandVOS = new ArrayList<>();
         boolean flag = false;
         //判断传入的id是否存在
-        BrandDictDO brandDictDO = brandDictRepository.selectById(brandId);
+        BrandDictDO brandDictDO = brandDictMapper.selectById(brandId);
         //判断id是否等于99
         if (brandId == CinemaConstants.ALL || brandDictDO == null || brandDictDO.getUuid() == null) {
             flag = true;
         }
         //查询所有列表
-        List<BrandDictDO> brandDictDOS = brandDictRepository.selectList(null);
+        List<BrandDictDO> brandDictDOS = brandDictMapper.selectList(null);
 
         for (BrandDictDO brandDict : brandDictDOS) {
             BrandVO brandVO = new BrandVO();
@@ -124,13 +123,13 @@ public class CinemaServiceAPIImpl implements CinemaServiceAPI {
         List<AreaVO> areaVOS = new ArrayList<>();
         boolean flag = false;
         //判断传入的id是否存在
-        AreaDictDO areaDictDO = areaDictRepository.selectById(areaId);
+        AreaDictDO areaDictDO = areaDictMapper.selectById(areaId);
         //判断id是否等于99
         if (areaId == CinemaConstants.ALL || areaDictDO == null || areaDictDO.getUuid() == null) {
             flag = true;
         }
         //查询所有列表
-        List<AreaDictDO> areaDictDOS = areaDictRepository.selectList(null);
+        List<AreaDictDO> areaDictDOS = areaDictMapper.selectList(null);
 
         for (AreaDictDO areaDict : areaDictDOS) {
             AreaVO areaVO = new AreaVO();
@@ -163,13 +162,13 @@ public class CinemaServiceAPIImpl implements CinemaServiceAPI {
         List<HallTypeVO> hallTypeVOS = new ArrayList<>();
         boolean flag = false;
         //判断传入的id是否存在
-        HallDictDO hallDictDO = hallDictRepository.selectById(hallType);
+        HallDictDO hallDictDO = hallDictMapper.selectById(hallType);
         //判断id是否等于99
         if (hallType == CinemaConstants.ALL || hallDictDO == null || hallDictDO.getUuid() == null) {
             flag = true;
         }
         //查询所有列表
-        List<HallDictDO> hallDictDOS = hallDictRepository.selectList(null);
+        List<HallDictDO> hallDictDOS = hallDictMapper.selectList(null);
 
         for (HallDictDO hallDict : hallDictDOS) {
             HallTypeVO hallTypeVO = new HallTypeVO();
@@ -198,7 +197,7 @@ public class CinemaServiceAPIImpl implements CinemaServiceAPI {
      */
     @Override
     public CinemaInfoVO getCinemaInfoById(int cinemaId) {
-        CinemaDO cinemaDO = cinemaRepository.selectById(cinemaId);
+        CinemaDO cinemaDO = cinemaMapper.selectById(cinemaId);
         CinemaInfoVO cinemaInfoVO = CinemaConvert.convert(cinemaDO);
         return cinemaInfoVO;
     }
@@ -211,7 +210,7 @@ public class CinemaServiceAPIImpl implements CinemaServiceAPI {
      */
     @Override
     public List<FilmInfoVO> getFilmInfoByCinemaId(int cinemaId) {
-        List<FilmInfoVO> filmInfoVOS = fieldRepository.getFilmInfos(cinemaId);
+        List<FilmInfoVO> filmInfoVOS = fieldMapper.getFilmInfos(cinemaId);
         return filmInfoVOS;
     }
 
@@ -223,7 +222,7 @@ public class CinemaServiceAPIImpl implements CinemaServiceAPI {
      */
     @Override
     public HallInfoVO getFilmFieldInfo(int fieldId) {
-        HallInfoVO hallInfoVO = fieldRepository.getHallInfo(fieldId);
+        HallInfoVO hallInfoVO = fieldMapper.getHallInfo(fieldId);
         return hallInfoVO;
     }
 
@@ -235,7 +234,7 @@ public class CinemaServiceAPIImpl implements CinemaServiceAPI {
      */
     @Override
     public FilmInfoVO getFilmInfoByFieldId(int fieldId) {
-        FilmInfoVO filmInfoVO = fieldRepository.getFilmInfoById(fieldId);
+        FilmInfoVO filmInfoVO = fieldMapper.getFilmInfoById(fieldId);
         return filmInfoVO;
     }
 }

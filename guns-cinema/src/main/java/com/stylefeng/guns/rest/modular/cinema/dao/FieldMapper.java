@@ -16,7 +16,7 @@ import java.util.List;
  * @author chenzhibin
  * @since 2020-04-24
  */
-public interface FieldRepository extends BaseMapper<FieldDO> {
+public interface FieldMapper extends BaseMapper<FieldDO> {
 
     List<FilmInfoVO> getFilmInfos(@Param("cinemaId") int cinemaId);
 
