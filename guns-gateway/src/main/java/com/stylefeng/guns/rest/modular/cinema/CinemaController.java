@@ -74,6 +74,7 @@ public class CinemaController {
             cinemaFieldsResponseVO.setFilmList(filmInfo);
             return ResponseVO.success(IMG_PRE, cinemaFieldsResponseVO);
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("获取播放场次失败!");
             return ResponseVO.serviceFail("获取播放场次失败!");
         }
@@ -95,7 +96,8 @@ public class CinemaController {
             cinemaFieldResponseVO.setHallInfo(hallInfo);
             return ResponseVO.success(IMG_PRE, cinemaFieldResponseVO);
         } catch (Exception e) {
-            log.error("获取选座信息失败!");
+            e.printStackTrace();
+            log.error("获取选座信息失败!",e);
             return ResponseVO.serviceFail("获取选座信息失败!");
         }
     }
