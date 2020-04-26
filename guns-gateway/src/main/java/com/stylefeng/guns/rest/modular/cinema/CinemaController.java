@@ -26,7 +26,7 @@ public class CinemaController {
 
     private static final String IMG_PRE = "http://img.meetingshop.cn/";
 
-    @Reference(interfaceClass = CinemaServiceAPI.class, check = false)
+    @Reference(interfaceClass = CinemaServiceAPI.class, cache = "lru", check = false)
     private CinemaServiceAPI cinemaServiceAPI;
 
     @RequestMapping(value = "getCinemas")
@@ -97,7 +97,7 @@ public class CinemaController {
             return ResponseVO.success(IMG_PRE, cinemaFieldResponseVO);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("获取选座信息失败!",e);
+            log.error("获取选座信息失败!", e);
             return ResponseVO.serviceFail("获取选座信息失败!");
         }
     }
