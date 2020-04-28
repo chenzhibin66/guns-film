@@ -49,7 +49,7 @@ WHERE
 	AND o.UUID = #{orderId}
     </select>
 
-    <select id="getOrderInfoByUserId" parameterType="java.lang.String" resultType="com.stylefeng.guns.api.order.vo.OrderVO">
+    <select id="getOrdersByUserId" parameterType="java.lang.String" resultType="com.stylefeng.guns.api.order.vo.OrderVO">
         SELECT
 	o.UUID AS orderId,
 	h.film_name AS filmName,
@@ -68,5 +68,9 @@ WHERE
 	AND o.field_id = f.UUID
 	AND o.film_id = h.film_id
 	AND o.order_user = #{userId}
+    </select>
+
+    <select id="getSoldSeatsByFieldId" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT GROUP_CONCAT(seats_ids) FROM `order` where field_id=#{fieldId}
     </select>
 </mapper>

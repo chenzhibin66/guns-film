@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -117,9 +118,13 @@ public class OrderServiceAPIImpl implements OrderServiceAPI {
 
         Integer insert = orderMapper.insert(orderDO);
         if (insert > 0) {
-            OrderVO orderVO=new OrderVO();
-            return null;
-
+            OrderVO orderVO = orderMapper.getOrderInfoById(uuid);
+            if (orderVO == null || orderVO.getOrderId() == null) {
+                log.error("订单信息查询失败,订单编号为{}", uuid);
+                return null;
+            } else {
+                return orderVO;
+            }
         } else {
             log.error("订单插入失败");
             return null;
@@ -128,12 +133,28 @@ public class OrderServiceAPIImpl implements OrderServiceAPI {
 
     @Override
     public List<OrderVO> getOrdersByUserId(Integer userId) {
-        return null;
+        if (userId == null) {
+            log.error("订单查询业务失败,用户id为空");
+            return null;
+        } else {
+            List<OrderVO> orders = orderMapper.getOrdersByUserId(userId);
+            if (orders == null && orders.size() == 0) {
+                return new ArrayList<>();
+            } else {
+                return orders;
+            }
+        }
     }
 
     @Override
     public String getSoldSeatsByFieldId(Integer fieldId) {
-        return null;
+        if (fieldId == null) {
+            log.error("查询已售座位错误,未传入任何场次编号");
+            return "";
+        } else {
+            String soldSeat = orderMapper.getSoldSeatsByFieldId(fieldId);
+            return soldSeat;
+        }
     }
 
     private double getTotalPrice(int solds, double filmPrice) {
