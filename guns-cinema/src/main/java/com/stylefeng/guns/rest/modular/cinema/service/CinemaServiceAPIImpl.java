@@ -6,10 +6,7 @@ import com.stylefeng.guns.api.cinema.CinemaServiceAPI;
 import com.stylefeng.guns.api.cinema.vo.*;
 import com.stylefeng.guns.rest.constant.CinemaConstants;
 import com.stylefeng.guns.rest.convert.CinemaConvert;
-import com.stylefeng.guns.rest.entity.AreaDictDO;
-import com.stylefeng.guns.rest.entity.BrandDictDO;
-import com.stylefeng.guns.rest.entity.CinemaDO;
-import com.stylefeng.guns.rest.entity.HallDictDO;
+import com.stylefeng.guns.rest.entity.*;
 import com.stylefeng.guns.rest.modular.cinema.dao.*;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.stereotype.Component;
@@ -236,5 +233,14 @@ public class CinemaServiceAPIImpl implements CinemaServiceAPI {
     public FilmInfoVO getFilmInfoByFieldId(int fieldId) {
         FilmInfoVO filmInfoVO = fieldMapper.getFilmInfoById(fieldId);
         return filmInfoVO;
+    }
+
+    @Override
+    public OrderQueryVO getOrderNeeds(int field) {
+        OrderQueryVO orderQueryVO = new OrderQueryVO();
+        FieldDO fieldDO = fieldMapper.selectById(field);
+        orderQueryVO.setCinemaId(fieldDO.getCinemaId() + "");
+        orderQueryVO.setFilmPrice(fieldDO.getPrice() + "");
+        return orderQueryVO;
     }
 }

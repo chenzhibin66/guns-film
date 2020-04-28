@@ -41,5 +41,11 @@ public interface OrderServiceAPI {
      */
     List<OrderVO> getOrdersByUserId(Integer userId);
 
+    /**
+     * 功能描述: 根据FieldId获取所有已经销售的座位编号
+     *
+     * @Param: [fieldId]
+     * @Return: java.lang.String
+     */
     String getSoldSeatsByFieldId(Integer fieldId);
 }

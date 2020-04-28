@@ -75,4 +75,6 @@ public interface CinemaServiceAPI {
      * @Return: com.stylefeng.guns.api.cinema.vo.FilmInfoVO
      */
     FilmInfoVO getFilmInfoByFieldId(int fieldId);
+
+    OrderQueryVO getOrderNeeds(int field);
 }
