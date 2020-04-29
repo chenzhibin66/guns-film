@@ -42,7 +42,10 @@ public class FTPUtil {
         BufferedReader bufferedReader = null;
         try {
             initFTPClient();
-            bufferedReader = new BufferedReader(new InputStreamReader(ftpClient.retrieveFileStream(fileAddress)));
+            bufferedReader = new BufferedReader(
+                    new InputStreamReader(
+                            ftpClient.retrieveFileStream(fileAddress))
+            );
             StringBuffer stringBuffer = new StringBuffer();
             while (true) {
                 String lineStr = bufferedReader.readLine();

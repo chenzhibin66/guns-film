@@ -2,6 +2,7 @@ package com.stylefeng.guns.rest.modular.order.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.api.cinema.CinemaServiceAPI;
 import com.stylefeng.guns.api.cinema.vo.FilmInfoVO;
 import com.stylefeng.guns.api.cinema.vo.OrderQueryVO;
@@ -34,7 +35,7 @@ public class OrderServiceAPIImpl implements OrderServiceAPI {
     @Resource
     private OrderMapper orderMapper;
 
-    @Reference(interfaceClass = CinemaServiceAPI.class,check = false)
+    @Reference(interfaceClass = CinemaServiceAPI.class, check = false)
     private CinemaServiceAPI cinemaServiceAPI;
 
     @Resource
@@ -133,16 +134,25 @@ public class OrderServiceAPIImpl implements OrderServiceAPI {
     }
 
     @Override
-    public List<OrderVO> getOrdersByUserId(Integer userId) {
+    public Page<OrderVO> getOrdersByUserId(Integer userId, Page<OrderVO> page) {
+        Page<OrderVO> result = new Page<>();
         if (userId == null) {
             log.error("订单查询业务失败,用户id为空");
             return null;
         } else {
-            List<OrderVO> orders = orderMapper.getOrdersByUserId(userId);
+            List<OrderVO> orders = orderMapper.getOrdersByUserId(userId, page);
             if (orders == null && orders.size() == 0) {
-                return new ArrayList<>();
+                result.setTotal(0);
+                result.setRecords(new ArrayList<>());
+                return result;
             } else {
-                return orders;
+                //获取订单总数
+                EntityWrapper<OrderDO> entityWrapper = new EntityWrapper<>();
+                entityWrapper.eq("order_user", userId);
+                Integer counts = orderMapper.selectCount(entityWrapper);
+                result.setTotal(counts);
+                result.setRecords(orders);
+                return result;
             }
         }
     }
