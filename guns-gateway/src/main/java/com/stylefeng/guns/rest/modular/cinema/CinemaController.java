@@ -3,6 +3,7 @@ package com.stylefeng.guns.rest.modular.cinema;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.api.cinema.CinemaServiceAPI;
 import com.stylefeng.guns.api.cinema.vo.*;
+import com.stylefeng.guns.api.order.OrderServiceAPI;
 import com.stylefeng.guns.rest.modular.cinema.vo.CinemaConditionResponseVO;
 import com.stylefeng.guns.rest.modular.cinema.vo.CinemaFieldResponseVO;
 import com.stylefeng.guns.rest.modular.cinema.vo.CinemaFieldsResponseVO;
@@ -28,6 +29,9 @@ public class CinemaController {
 
     @Reference(interfaceClass = CinemaServiceAPI.class, cache = "lru", check = false)
     private CinemaServiceAPI cinemaServiceAPI;
+
+    @Reference(interfaceClass = OrderServiceAPI.class, check = false)
+    private OrderServiceAPI orderServiceAPI;
 
     @RequestMapping(value = "getCinemas")
     public ResponseVO getCinemas(CinemaQueryVO cinemaQueryVO) {
@@ -87,9 +91,7 @@ public class CinemaController {
             FilmInfoVO filmInfo = cinemaServiceAPI.getFilmInfoByFieldId(fieldId);
             HallInfoVO hallInfo = cinemaServiceAPI.getFilmFieldInfo(fieldId);
 
-            hallInfo.setSoldSeats("1,2,3");
-
-
+            hallInfo.setSoldSeats(orderServiceAPI.getSoldSeatsByFieldId(fieldId));
             CinemaFieldResponseVO cinemaFieldResponseVO = new CinemaFieldResponseVO();
             cinemaFieldResponseVO.setCinemaInfo(cinemaInfo);
             cinemaFieldResponseVO.setFilmInfo(filmInfo);

@@ -40,6 +40,7 @@ logging:
   level.com.stylefeng: debug
   path: logs/
   file: meetingfilm-user.log
+
 dubbo:
   registry:
     address: zookeeper://localhost:2181

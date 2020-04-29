@@ -12,6 +12,7 @@ import com.stylefeng.guns.rest.common.util.FTPUtil;
 import com.stylefeng.guns.rest.entity.OrderDO;
 import com.stylefeng.guns.rest.modular.order.dao.OrderMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +34,7 @@ public class OrderServiceAPIImpl implements OrderServiceAPI {
     @Resource
     private OrderMapper orderMapper;
 
-    @Resource
+    @Reference(interfaceClass = CinemaServiceAPI.class,check = false)
     private CinemaServiceAPI cinemaServiceAPI;
 
     @Resource
