@@ -59,7 +59,7 @@ public class EntityGenerator {
         //strategy.setTablePrefix(new String[]{"_"});// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
         //strategy.setInclude(new String[]{"banner","cat_dict","area_dict","year_dict","film","film_info","actor"});
-        strategy.setInclude(new String[]{"order"});
+        strategy.setInclude(new String[]{"order_2019","order_2020"});
         mpg.setStrategy(strategy);
 
         // 包配置
