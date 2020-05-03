@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 @ConfigurationProperties(prefix = "ftp")
 public class FTPUtil {
 
+    // 地址 端口 用户名 密码
     private String hostName;
     private Integer port;
     private String userName;
@@ -38,6 +39,7 @@ public class FTPUtil {
         }
     }
 
+    // 输入一个路径，然后将路径里的文件转换成字符串返回给我
     public String getFileStrByAddress(String fileAddress) {
         BufferedReader bufferedReader = null;
         try {
@@ -46,6 +48,7 @@ public class FTPUtil {
                     new InputStreamReader(
                             ftpClient.retrieveFileStream(fileAddress))
             );
+
             StringBuffer stringBuffer = new StringBuffer();
             while (true) {
                 String lineStr = bufferedReader.readLine();
@@ -54,10 +57,11 @@ public class FTPUtil {
                 }
                 stringBuffer.append(lineStr);
             }
+
             ftpClient.logout();
             return stringBuffer.toString();
         } catch (Exception e) {
-            log.error("获取文件信息失败!", e);
+            log.error("获取文件信息失败", e);
         } finally {
             try {
                 bufferedReader.close();
@@ -66,5 +70,13 @@ public class FTPUtil {
             }
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+
+        FTPUtil ftpUtil = new FTPUtil();
+        String fileStrByAddress = ftpUtil.getFileStrByAddress("seats/cgs.json");
+
+        System.out.println(fileStrByAddress);
     }
 }

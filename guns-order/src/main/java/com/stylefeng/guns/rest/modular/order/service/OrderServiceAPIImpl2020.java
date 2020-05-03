@@ -15,6 +15,7 @@ import com.stylefeng.guns.rest.modular.order.dao.Order2020Mapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@Service(interfaceClass = OrderServiceAPI.class, group = "order2020")
+@Service(interfaceClass = OrderServiceAPI.class)
 public class OrderServiceAPIImpl2020 implements OrderServiceAPI {
 
     @Resource
@@ -38,7 +39,7 @@ public class OrderServiceAPIImpl2020 implements OrderServiceAPI {
     @Reference(interfaceClass = CinemaServiceAPI.class, check = false)
     private CinemaServiceAPI cinemaServiceAPI;
 
-    @Resource
+    @Autowired
     private FTPUtil ftpUtil;
 
     @Override
@@ -47,7 +48,6 @@ public class OrderServiceAPIImpl2020 implements OrderServiceAPI {
         String seatPath = order2020Mapper.getSeatsByFieldId(fieldId);
         //读取位置图,判断seats是否为真
         String fileStrByAddress = ftpUtil.getFileStrByAddress(seatPath);
-
         //将fileStrByAddress转为JSON对象
         JSONObject jsonObject = JSONObject.parseObject(fileStrByAddress);
         //seats=1,2,3 ids="1,3,4,7,88"
@@ -74,7 +74,7 @@ public class OrderServiceAPIImpl2020 implements OrderServiceAPI {
     @Override
     public boolean isNotSoldSeats(String fieldId, String seats) {
         EntityWrapper<Order2020DO> entityWrapper = new EntityWrapper();
-        entityWrapper.eq("fileld_id", fieldId);
+        entityWrapper.eq("field_id", fieldId);
         List<Order2020DO> Order2020DOS = order2020Mapper.selectList(entityWrapper);
         String[] seatArrs = seats.split(",");
         //有任何一个编号匹配上,则直接返回失败
@@ -165,6 +165,39 @@ public class OrderServiceAPIImpl2020 implements OrderServiceAPI {
         } else {
             String soldSeat = order2020Mapper.getSoldSeatsByFieldId(fieldId);
             return soldSeat;
+        }
+    }
+
+    @Override
+    public OrderVO getOrderInfoById(String orderId) {
+
+        OrderVO orderInfo = order2020Mapper.getOrderInfoById(orderId);
+        return orderInfo;
+    }
+
+    @Override
+    public boolean paySuccess(String orderId) {
+        Order2020DO order2020DO = new Order2020DO();
+        order2020DO.setUuid(orderId);
+        order2020DO.setOrderStatus(1);
+        Integer result = order2020Mapper.updateById(order2020DO);
+        if (result >= 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean payFail(String orderId) {
+        Order2020DO oderDO = new Order2020DO();
+        oderDO.setUuid(orderId);
+        oderDO.setOrderStatus(2);
+        Integer result = order2020Mapper.updateById(oderDO);
+        if (result >= 1) {
+            return true;
+        } else {
+            return false;
         }
     }
 

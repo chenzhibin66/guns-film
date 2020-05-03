@@ -48,7 +48,7 @@ WHERE
 	AND o.UUID = #{orderId}
     </select>
 
-    <select id="getOrdersByUserId" parameterType="java.lang.String" resultType="com.stylefeng.guns.api.order.vo.OrderVO">
+    <select id="getOrdersByUserId" parameterType="java.lang.Integer" resultType="com.stylefeng.guns.api.order.vo.OrderVO">
         SELECT
 	o.UUID AS orderId,
 	h.film_name AS filmName,

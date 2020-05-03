@@ -49,4 +49,17 @@ public interface OrderServiceAPI {
      * @Return: java.lang.String
      */
     String getSoldSeatsByFieldId(Integer fieldId);
+
+    /**
+     * 功能描述: 根据订单编号获取订单信息
+     *
+     * @Param: [orderId]
+     * @Return: com.stylefeng.guns.api.order.vo.OrderVO
+     */
+    OrderVO getOrderInfoById(String orderId);
+
+
+    boolean paySuccess(String orderId);
+
+    boolean payFail(String orderId);
 }
