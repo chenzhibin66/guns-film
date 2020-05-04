@@ -23,7 +23,7 @@ public class Order2020DO extends Model<Order2020DO> {
     /**
      * 主键编号
      */
-    @TableField("UUID")
+    @TableId("UUID")
     private String uuid;
     /**
      * 影院编号
