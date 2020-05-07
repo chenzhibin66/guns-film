@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.api.film.FilmServiceAPI;
 import com.stylefeng.guns.api.film.vo.*;
+import com.stylefeng.guns.core.util.DateUtil;
 import com.stylefeng.guns.rest.constant.FilmConstants;
-import com.stylefeng.guns.rest.convert.FilmConvert;
 import com.stylefeng.guns.rest.entity.*;
 import com.stylefeng.guns.rest.modular.film.dao.*;
 import org.apache.dubbo.config.annotation.Service;
@@ -41,7 +41,14 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
     @Override
     public List<BannerVO> getBanners() {
         List<BannerDO> bannerDOList = bannerRepository.selectList(null);
-        List<BannerVO> bannerVOList = FilmConvert.convertToBannerVOS(bannerDOList);
+        List<BannerVO> bannerVOList = new ArrayList<>();
+        for (BannerDO bannerDO : bannerDOList) {
+            BannerVO bannerVO = new BannerVO();
+            bannerVO.setBannerId(bannerDO.getUuid() + "");
+            bannerVO.setBannerUrl(bannerDO.getBannerUrl());
+            bannerVO.setBannerAddress(bannerDO.getBannerAddress());
+            bannerVOList.add(bannerVO);
+        }
         return bannerVOList;
     }
 
@@ -58,7 +65,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
             //如果是,则限制条数\限制内容为热门影片
             Page<FilmDO> page = new Page<>(1, nums);
             List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
-            filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
+            filmInfos = getFilmInfos(filmDOS);
         } else {
             //如果不是,则是列表页,同样需要限制内容为热门影片
             Page<FilmDO> page = null;
@@ -80,7 +87,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
             // 如果sourceId,yearId,catId 不为99 ,则表示要按照对应的编号进行查询
             judge(sourceId, yearId, catId, entityWrapper);
             List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
-            filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
+            filmInfos = getFilmInfos(filmDOS);
 
             filmVO.setFilmNum(filmDOS.size());
 
@@ -106,7 +113,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
         if (isLimit) {
             Page<FilmDO> page = new Page<>(1, nums);
             List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
-            filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
+            filmInfos = getFilmInfos(filmDOS);
             filmVO.setFilmNum(filmDOS.size());
             filmVO.setFilmInfos(filmInfos);
         } else {
@@ -130,7 +137,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
             judge(sourceId, yearId, catId, entityWrapper);
             List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
 
-            filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
+            filmInfos = getFilmInfos(filmDOS);
             filmVO.setFilmNum(filmDOS.size());
             // 需要总页数 totalCounts/nums -> 0 + 1 = 1
             // 每页10条，我现在有6条 -> 1
@@ -177,7 +184,7 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
 
         List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
         // 组织filmInfos
-        filmInfos = FilmConvert.convertToFilmInfo(filmDOS);
+        filmInfos = getFilmInfos(filmDOS);
         filmVO.setFilmNum(filmDOS.size());
 
         // 需要总页数 totalCounts/nums -> 0 + 1 = 1
@@ -215,21 +222,40 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
     public List<CatVO> getCats() {
 
         List<CatDictDO> catDicts = catDictRepository.selectList(null);
-        List<CatVO> catVOs = FilmConvert.convertToCatVO(catDicts);
+        List<CatVO> catVOs = new ArrayList<>();
+        for (CatDictDO catDictDO : catDicts) {
+            CatVO catVO = new CatVO();
+            catVO.setCatId(catDictDO.getUuid() + "");
+            catVO.setCatName(catDictDO.getShowName());
+            catVOs.add(catVO);
+        }
         return catVOs;
     }
 
     @Override
     public List<SourceVO> getSources() {
         List<SourceDictDO> sourceDictDOs = sourceDictRepository.selectList(null);
-        List<SourceVO> sourceVOs = FilmConvert.convertToSourceVO(sourceDictDOs);
+        List<SourceVO> sourceVOs = new ArrayList<>();
+        for (SourceDictDO sourceDictDO : sourceDictDOs) {
+            SourceVO sourceVO = new SourceVO();
+            sourceVO.setSourceId(sourceDictDO.getUuid() + "");
+            sourceVO.setSourceName(sourceDictDO.getShowName());
+            sourceVOs.add(sourceVO);
+        }
+
         return sourceVOs;
     }
 
     @Override
     public List<YearVO> getYears() {
         List<YearDictDO> yearDictDOs = yearDictRepository.selectList(null);
-        List<YearVO> yearVOs = FilmConvert.convert(yearDictDOs);
+        List<YearVO> yearVOs = new ArrayList<>();
+        for (YearDictDO yearDictDO : yearDictDOs) {
+            YearVO yearVO = new YearVO();
+            yearVO.setYearId(yearDictDO.getUuid() + "");
+            yearVO.setYearName(yearDictDO.getShowName());
+            yearVOs.add(yearVO);
+        }
         return yearVOs;
     }
 
@@ -293,7 +319,29 @@ public class FilmServiceAPIImpl implements FilmServiceAPI {
         EntityWrapper<FilmDO> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq(FilmConstants.FILM_STATUS, params);
         Page<FilmDO> page = new Page<>(current, size, orderByFiled);
-        List<FilmInfo> filmInfos = FilmConvert.convertToFilmInfo(filmRepository.selectPage(page, entityWrapper));
+        List<FilmDO> filmDOS = filmRepository.selectPage(page, entityWrapper);
+        List<FilmInfo> filmInfos = getFilmInfos(filmDOS);
+        return filmInfos;
+    }
+
+    private List<FilmInfo> getFilmInfos(List<FilmDO> filmDOS) {
+        List<FilmInfo> filmInfos = new ArrayList<>();
+        for (FilmDO filmDO : filmDOS) {
+            FilmInfo filmInfo = new FilmInfo();
+            filmInfo.setScore(filmDO.getFilmScore());
+            filmInfo.setImgAddress(filmDO.getImgAddress());
+            filmInfo.setFilmType(filmDO.getFilmType());
+            filmInfo.setFilmScore(filmDO.getFilmScore());
+            filmInfo.setFilmName(filmDO.getFilmName());
+            filmInfo.setFilmId(filmDO.getUuid() + "");
+            filmInfo.setExpectNum(filmDO.getFilmPresalenum());
+            filmInfo.setBoxNum(filmDO.getFilmBoxOffice());
+            filmInfo.setShowTime(DateUtil.getDay(filmDO.getFilmTime()));
+
+            // 将转换的对象放入结果集
+            filmInfos.add(filmInfo);
+        }
+
         return filmInfos;
     }
 

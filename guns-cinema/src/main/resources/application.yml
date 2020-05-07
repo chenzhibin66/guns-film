@@ -30,7 +30,7 @@ spring:
   application:
     name: meeting-cinema
   datasource:
-      url: jdbc:mysql://127.0.0.1:3306/dubbo?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+      url: jdbc:mysql://127.0.0.1:3306/dubbo?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false
       username: root
       password: even0704
       filters: log4j,wall,mergeStat

@@ -13,7 +13,7 @@ server:
   port: 8084 #项目端口
 
 mybatis-plus:
-  mapper-locations: classpath*:com/stylefeng/guns/rest/**/mapper/*.xml
+  mapper-locations: classpath*:com/stylefeng/guns/rest/**/repository/*.xml
   typeAliasesPackage: com.stylefeng.guns.rest.entity
   global-config:
     id-type: 0  #0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)
@@ -30,7 +30,7 @@ spring:
   application:
     name: meeting-film
   datasource:
-      url: jdbc:mysql://127.0.0.1:3306/dubbo?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+      url: jdbc:mysql://127.0.0.1:3306/dubbo?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
       username: root
       password: even0704
       filters: log4j,wall,mergeStat
@@ -44,5 +44,8 @@ dubbo:
   registry:
     address: zookeeper://localhost:2181
     server: true
-    protocol: dubbo
-    port: 20882
+  protocol:
+    port: "20882"
+    name: dubbo
+  scan:
+    base-packages: com.stylefeng.guns.rest.modular.film.service

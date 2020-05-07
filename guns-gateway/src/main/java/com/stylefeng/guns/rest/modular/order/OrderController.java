@@ -8,16 +8,13 @@ import com.stylefeng.guns.api.alipay.vo.AliPayInfoVO;
 import com.stylefeng.guns.api.alipay.vo.AliPayResultVO;
 import com.stylefeng.guns.api.order.OrderServiceAPI;
 import com.stylefeng.guns.api.order.vo.OrderVO;
-import com.stylefeng.guns.core.util.TokenBucket;
 import com.stylefeng.guns.core.util.ToolUtil;
 import com.stylefeng.guns.rest.common.CurrentUser;
+import com.stylefeng.guns.rest.common.util.TokenBucket;
 import com.stylefeng.guns.rest.modular.vo.ResponseVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +23,7 @@ import java.util.List;
  * @author chenzhibin
  * @time 2020/4/26 15:51
  */
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Slf4j
 @RestController
 @RequestMapping(value = "/order/")
@@ -45,19 +43,19 @@ public class OrderController {
         return ResponseVO.serviceFail("抱歉，下单的人太多了，请稍后重试");
     }
 
-     @HystrixCommand(fallbackMethod = "error", commandProperties = {
-             @HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
-             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "4000"),
-             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),
-             @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50")},
-             threadPoolProperties = {
-                     @HystrixProperty(name = "coreSize", value = "1"),
-                     @HystrixProperty(name = "maxQueueSize", value = "10"),
-                     @HystrixProperty(name = "keepAliveTimeMinutes", value = "1000"),
-                     @HystrixProperty(name = "queueSizeRejectionThreshold", value = "8"),
-                     @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "12"),
-                     @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "1500")
-             })
+    @HystrixCommand(fallbackMethod = "error", commandProperties = {
+            @HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "4000"),
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50")},
+            threadPoolProperties = {
+                    @HystrixProperty(name = "coreSize", value = "1"),
+                    @HystrixProperty(name = "maxQueueSize", value = "10"),
+                    @HystrixProperty(name = "keepAliveTimeMinutes", value = "1000"),
+                    @HystrixProperty(name = "queueSizeRejectionThreshold", value = "8"),
+                    @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "12"),
+                    @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "1500")
+            })
     @RequestMapping(value = "buyTickets", method = RequestMethod.POST)
     public ResponseVO buyTickets(Integer fieldId, String soldSeats, String seatsName) {
         if (tokenBucket.getToken()) {
@@ -92,7 +90,7 @@ public class OrderController {
                                    @RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer pageSize) {
         //获取当前登录人的信息
         String userId = CurrentUser.getCurrentUser();
-        System.out.println("userId:"+userId);
+        System.out.println("userId:" + userId);
         //使用当前登录人获取已经购买的订单
         Page<OrderVO> page = new Page<>(nowPage, pageSize);
         if (userId != null && userId.trim().length() > 0) {

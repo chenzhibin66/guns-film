@@ -20,15 +20,16 @@ import java.util.concurrent.Future;
  * @author chenzhibin
  * @time 2020/3/29 15:36
  */
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/film/")
 public class FilmController {
 
     private static final String IMG_PRE = "http//img/pre/";
-    @Reference(interfaceClass = FilmServiceAPI.class,check = false)
+    @Reference(interfaceClass = FilmServiceAPI.class, check = false)
     private FilmServiceAPI filmServiceAPI;
 
-    @Reference(interfaceClass = FilmAsyncServiceAPI.class, async = true,check = false)
+    @Reference(interfaceClass = FilmAsyncServiceAPI.class, async = true, check = false)
     private FilmAsyncServiceAPI filmAsyncServiceAPI;
 
     /**
@@ -145,16 +146,6 @@ public class FilmController {
     public ResponseVO getFilms(FilmRequestVO filmRequestVO) {
         FilmVO filmVO = null;
         String img_pre = "http://img.meetingshop.cn/";
-        //如果为空,则传入默认值
-        if (null == filmRequestVO) {
-            filmRequestVO.setShowType(1);
-            filmRequestVO.setSortId(1);
-            filmRequestVO.setCatId(99);
-            filmRequestVO.setSourceId(99);
-            filmRequestVO.setYearId(99);
-            filmRequestVO.setNowPage(1);
-            filmRequestVO.setPageSize(18);
-        }
         // 根据showType判断影片查询类型
         switch (filmRequestVO.getShowType()) {
             case 1:

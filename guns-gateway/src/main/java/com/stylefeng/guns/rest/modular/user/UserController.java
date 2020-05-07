@@ -6,6 +6,7 @@ import com.stylefeng.guns.api.user.vo.UserModel;
 import com.stylefeng.guns.rest.common.CurrentUser;
 import com.stylefeng.guns.rest.modular.vo.ResponseVO;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,11 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @author chenzhibin
  * @time 2020/3/24 20:53
  */
+@CrossOrigin(origins = "*",maxAge = 3600)
 @RequestMapping("/user")
 @RestController
 public class UserController {
 
-    @Reference(interfaceClass = UserAPI.class,check = false)
+    @Reference(interfaceClass = UserAPI.class, check = false)
     private UserAPI userAPI;
 
     @RequestMapping("register")
