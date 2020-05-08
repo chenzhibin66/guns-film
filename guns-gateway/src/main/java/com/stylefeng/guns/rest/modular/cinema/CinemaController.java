@@ -21,13 +21,12 @@ import java.util.List;
  * @author chenzhibin
  * @time 2020/4/23 16:14
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
 @Slf4j
 @RestController
 @RequestMapping("/cinema/")
 public class CinemaController {
 
-    private static final String IMG_PRE = "http://img.meetingshop.cn/";
+    private static final String IMG_PRE = "http://39.96.162.42/get_audio_src?filename=";
 
     @Reference(interfaceClass = CinemaServiceAPI.class, cache = "lru", check = false)
     private CinemaServiceAPI cinemaServiceAPI;

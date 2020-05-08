@@ -23,14 +23,13 @@ import java.util.List;
  * @author chenzhibin
  * @time 2020/4/26 15:51
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
 @Slf4j
 @RestController
 @RequestMapping(value = "/order/")
 public class OrderController {
 
     private static TokenBucket tokenBucket = new TokenBucket();
-    private static final String IMG_PRE = "http://img.meetingshop.cn/";
+    private static final String IMG_PRE = "http://39.96.162.42/get_audio_src?filename=";
 
     @Reference(interfaceClass = OrderServiceAPI.class, check = false)
     private OrderServiceAPI orderServiceAPI;

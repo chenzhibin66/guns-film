@@ -20,12 +20,11 @@ import java.util.concurrent.Future;
  * @author chenzhibin
  * @time 2020/3/29 15:36
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/film/")
 public class FilmController {
 
-    private static final String IMG_PRE = "http//img/pre/";
+    private static final String IMG_PRE = "http://39.96.162.42/get_audio_src?filename=";
     @Reference(interfaceClass = FilmServiceAPI.class, check = false)
     private FilmServiceAPI filmServiceAPI;
 
@@ -145,7 +144,7 @@ public class FilmController {
     @RequestMapping(value = "getFilms", method = RequestMethod.GET)
     public ResponseVO getFilms(FilmRequestVO filmRequestVO) {
         FilmVO filmVO = null;
-        String img_pre = "http://img.meetingshop.cn/";
+        String img_pre = "";
         // 根据showType判断影片查询类型
         switch (filmRequestVO.getShowType()) {
             case 1:
@@ -216,7 +215,7 @@ public class FilmController {
         infoRequestVO.setImgVO(imgVOFuture.get());
 
         filmDetailVO.setInfo04(infoRequestVO);
-        return ResponseVO.success("http://img.meetingshop.cn/", filmDetailVO);
+        return ResponseVO.success("", filmDetailVO);
 
     }
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author chenzhibin
  * @time 2020/3/24 20:53
  */
-@CrossOrigin(origins = "*",maxAge = 3600)
 @RequestMapping("/user")
 @RestController
 public class UserController {
@@ -56,7 +55,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
     public ResponseVO logout() {
         return ResponseVO.success("用户退出成功");
     }

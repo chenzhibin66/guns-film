@@ -7,7 +7,6 @@ import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
 import com.stylefeng.guns.rest.modular.vo.ResponseVO;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author fengshuonan
  * @Date 2017/8/24 14:22
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class AuthController {
 
