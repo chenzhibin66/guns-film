@@ -24,7 +24,7 @@ import java.util.concurrent.Future;
 @RequestMapping("/film/")
 public class FilmController {
 
-    private static final String IMG_PRE = "http://39.96.162.42/get_audio_src?filename=";
+    private static final String IMG_PRE = "http://39.96.162.42/get_audio_src?";
     @Reference(interfaceClass = FilmServiceAPI.class, check = false)
     private FilmServiceAPI filmServiceAPI;
 
@@ -144,7 +144,7 @@ public class FilmController {
     @RequestMapping(value = "getFilms", method = RequestMethod.GET)
     public ResponseVO getFilms(FilmRequestVO filmRequestVO) {
         FilmVO filmVO = null;
-        String img_pre = "";
+        String img_pre = "http://39.96.162.42/get_audio_src?";
         // 根据showType判断影片查询类型
         switch (filmRequestVO.getShowType()) {
             case 1:
@@ -208,14 +208,13 @@ public class FilmController {
         ActorRequestVO actorRequestVO = new ActorRequestVO();
         actorRequestVO.setActors(actorsFuture.get());
         actorRequestVO.setDirector(directorFuture.get());
-
         infoRequestVO.setActors(actorRequestVO);
         infoRequestVO.setBiography(filmDescVOFuture.get().getBiography());
         infoRequestVO.setFilmId(filmId);
         infoRequestVO.setImgVO(imgVOFuture.get());
 
         filmDetailVO.setInfo04(infoRequestVO);
-        return ResponseVO.success("", filmDetailVO);
+        return ResponseVO.success("http://39.96.162.42/get_audio_src?", filmDetailVO);
 
     }
 }

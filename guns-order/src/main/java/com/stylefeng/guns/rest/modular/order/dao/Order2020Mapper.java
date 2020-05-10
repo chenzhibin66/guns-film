@@ -14,10 +14,9 @@ import java.util.List;
  * </p>
  *
  * @author chenzhibin
- * @since 2020-04-30
+ * @since 2020-05-10
  */
 public interface Order2020Mapper extends BaseMapper<Order2020DO> {
-
     String getSeatsByFieldId(@Param("fieldId") String fieldId);
 
     OrderVO getOrderInfoById(@Param("orderId") String orderId);
@@ -25,4 +24,6 @@ public interface Order2020Mapper extends BaseMapper<Order2020DO> {
     List<OrderVO> getOrdersByUserId(@Param("userId") Integer userId, Page<OrderVO> page);
 
     String getSoldSeatsByFieldId(@Param("fieldId") Integer fieldId);
+
+    Integer save(Order2020DO order2020DO);
 }

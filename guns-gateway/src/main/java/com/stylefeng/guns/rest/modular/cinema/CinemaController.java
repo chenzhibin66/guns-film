@@ -10,10 +10,8 @@ import com.stylefeng.guns.rest.modular.cinema.vo.CinemaFieldsResponseVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,11 +20,12 @@ import java.util.List;
  * @time 2020/4/23 16:14
  */
 @Slf4j
-@RestController
+@Controller
+@ResponseBody
 @RequestMapping("/cinema/")
 public class CinemaController {
 
-    private static final String IMG_PRE = "http://39.96.162.42/get_audio_src?filename=";
+    private static final String IMG_PRE = "http://39.96.162.42/get_audio_src?";
 
     @Reference(interfaceClass = CinemaServiceAPI.class, cache = "lru", check = false)
     private CinemaServiceAPI cinemaServiceAPI;
@@ -87,11 +86,15 @@ public class CinemaController {
 
     @RequestMapping(value = "getFieldInfo", method = RequestMethod.POST)
     public ResponseVO getFieldInfo(Integer cinemaId, Integer fieldId) {
+        if (cinemaId == null && fieldId == null) {
+            log.error("cinemaId and fieldId is null");
+            return null;
+        }
+        System.out.println("cinemaId:" + cinemaId + " " + "filedId:" + fieldId);
         try {
             CinemaInfoVO cinemaInfo = cinemaServiceAPI.getCinemaInfoById(cinemaId);
             FilmInfoVO filmInfo = cinemaServiceAPI.getFilmInfoByFieldId(fieldId);
             HallInfoVO hallInfo = cinemaServiceAPI.getFilmFieldInfo(fieldId);
-
             hallInfo.setSoldSeats(orderServiceAPI.getSoldSeatsByFieldId(fieldId));
             CinemaFieldResponseVO cinemaFieldResponseVO = new CinemaFieldResponseVO();
             cinemaFieldResponseVO.setCinemaInfo(cinemaInfo);

@@ -29,7 +29,7 @@ import java.util.List;
 public class OrderController {
 
     private static TokenBucket tokenBucket = new TokenBucket();
-    private static final String IMG_PRE = "http://39.96.162.42/get_audio_src?filename=";
+    private static final String IMG_PRE = "";
 
     @Reference(interfaceClass = OrderServiceAPI.class, check = false)
     private OrderServiceAPI orderServiceAPI;
@@ -42,7 +42,7 @@ public class OrderController {
         return ResponseVO.serviceFail("抱歉，下单的人太多了，请稍后重试");
     }
 
-    @HystrixCommand(fallbackMethod = "error", commandProperties = {
+/*    @HystrixCommand(fallbackMethod = "error", commandProperties = {
             @HystrixProperty(name = "execution.isolation.strategy", value = "THREAD"),
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "4000"),
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),
@@ -54,7 +54,7 @@ public class OrderController {
                     @HystrixProperty(name = "queueSizeRejectionThreshold", value = "8"),
                     @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "12"),
                     @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "1500")
-            })
+            })*/
     @RequestMapping(value = "buyTickets", method = RequestMethod.POST)
     public ResponseVO buyTickets(Integer fieldId, String soldSeats, String seatsName) {
         if (tokenBucket.getToken()) {

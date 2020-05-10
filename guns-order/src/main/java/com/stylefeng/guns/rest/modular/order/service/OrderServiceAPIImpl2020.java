@@ -1,3 +1,4 @@
+
 package com.stylefeng.guns.rest.modular.order.service;
 
 import com.alibaba.fastjson.JSONObject;
@@ -24,10 +25,12 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * @author chenzhibin
  * @time 2020/4/27 14:49
  */
+
 @Slf4j
 @Component
 @Service(interfaceClass = OrderServiceAPI.class)
@@ -118,7 +121,7 @@ public class OrderServiceAPIImpl2020 implements OrderServiceAPI {
         Order2020DO.setFilmId(filmId);
         Order2020DO.setCinemaId(cinemaId);
 
-        Integer insert = order2020Mapper.insert(Order2020DO);
+        Integer insert = order2020Mapper.save(Order2020DO);
         if (insert > 0) {
             OrderVO orderVO = order2020Mapper.getOrderInfoById(uuid);
             if (orderVO == null || orderVO.getOrderId() == null) {
@@ -209,3 +212,4 @@ public class OrderServiceAPIImpl2020 implements OrderServiceAPI {
         return bigDecimal.doubleValue();
     }
 }
+

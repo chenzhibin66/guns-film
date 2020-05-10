@@ -15,7 +15,6 @@
     <url>http://maven.apache.org</url>
 
     <dependencies>
-
         <!--通用依赖-->
         <dependency>
             <groupId>com.baomidou</groupId>

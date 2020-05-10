@@ -24,7 +24,7 @@
         <result column="actors" property="actors"/>
         <result column="img_address" property="imgAddress"/>
         <collection property="filmFields" ofType="com.stylefeng.guns.api.cinema.vo.FilmFieldVO">
-            <result column="field_id" property="fieldId"/>
+            <result column="UUID" property="fieldId"/>
             <result column="begin_time" property="beginTime"/>
             <result column="end_time" property="endTime"/>
             <result column="film_language" property="language"/>

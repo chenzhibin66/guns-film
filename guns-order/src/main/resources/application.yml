@@ -53,5 +53,5 @@ dubbo:
   scan:
     base-packages: com.stylefeng.guns.rest.modular.order.service
   protocol:
-    port: "20888"
+    port: "20999"
     name: dubbo

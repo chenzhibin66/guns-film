@@ -1,6 +1,7 @@
 package com.stylefeng.guns.rest.modular.service;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.stylefeng.guns.api.alipay.AliPayServiceAPI;
 import com.stylefeng.guns.api.alipay.vo.AliPayInfoVO;
@@ -8,6 +9,7 @@ import com.stylefeng.guns.api.alipay.vo.AliPayResultVO;
 import com.stylefeng.guns.api.order.OrderServiceAPI;
 import com.stylefeng.guns.api.order.vo.OrderVO;
 import com.stylefeng.guns.rest.common.util.FTPUtil;
+import com.stylefeng.guns.rest.entity.ResultJson;
 import com.stylefeng.guns.rest.modular.alipay.config.Configs;
 import com.stylefeng.guns.rest.modular.alipay.model.ExtendParams;
 import com.stylefeng.guns.rest.modular.alipay.model.GoodsDetail;
@@ -22,12 +24,14 @@ import com.stylefeng.guns.rest.modular.alipay.service.impl.AlipayTradeServiceImp
 import com.stylefeng.guns.rest.modular.alipay.service.impl.AlipayTradeWithHBServiceImpl;
 import com.stylefeng.guns.rest.modular.alipay.utils.ZxingUtils;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,9 +85,11 @@ public class AliPayServiceAPIImpl implements AliPayServiceAPI {
         if (filePath == null || filePath.trim().length() == 0) {
             return null;
         } else {
+            String url = upLoad(filePath);
             AliPayInfoVO aliPayInfoVO = new AliPayInfoVO();
             aliPayInfoVO.setOrderId(orderId);
-            aliPayInfoVO.setQRCodeAddress(filePath);
+            System.out.println("生成的url:" + url);
+            aliPayInfoVO.setQRCodeAddress(url);
             return aliPayInfoVO;
         }
     }
@@ -240,6 +246,33 @@ public class AliPayServiceAPIImpl implements AliPayServiceAPI {
                 break;
         }
         return filePath;
+    }
+
+    public String upLoad(String address) {
+        ResultJson result = null;
+        try {
+            String name = address.substring(address.lastIndexOf("/") + 1);
+            OkHttpClient client = new OkHttpClient().newBuilder()
+                    .build();
+            MediaType mediaType = MediaType.parse("text/plain");
+            RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("img", address,
+                            RequestBody.create(MediaType.parse("application/octet-stream"),
+                                    new File(address)))
+                    .addFormDataPart("name", name)
+                    .build();
+            Request request = new Request.Builder()
+                    .url("http://39.96.162.42/upload")
+                    .method("POST", body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            String res = response.body().string();
+            result = JSONObject.parseObject(res, ResultJson.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result.getUrl();
     }
 
 }

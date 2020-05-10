@@ -1,9 +1,9 @@
 package com.stylefeng.guns.rest.entity;
 
 import java.util.Date;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
 
@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author chenzhibin
- * @since 2020-04-30
+ * @since 2020-05-10
  */
 @TableName("order_2020")
 public class Order2020DO extends Model<Order2020DO> {
@@ -167,7 +167,7 @@ public class Order2020DO extends Model<Order2020DO> {
 
     @Override
     protected Serializable pkVal() {
-        return null;
+        return this.uuid;
     }
 
     @Override
